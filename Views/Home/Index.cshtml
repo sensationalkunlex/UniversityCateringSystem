@@ -1,0 +1,162 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+@model List<Product>
+
+@* 
+
+    <header class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <nav class="container-xxl bd-gutter flex-wrap flex-lg-nowrap">
+            <a class="navbar-brand" href="/">
+                <img src="https://www.hull.ac.uk/assets/developer/static-templates/header/images/new/uoh-white.svg" width="30" height="30" alt="Unversity of Hull logo" class="d-inline-block align-top">
+              
+            </a>
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+                    </li>
+                 
+                </ul>
+               
+
+            </div>
+
+            <div class="view-count">
+                <div class="user-view">
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <a class="btn btn-outline-dark bg-white btn-sm" href="/logout">Sign-Out</a>
+                    }
+                    else
+                    {
+                    <a class="btn btn-outline-dark btn-sm bg-white" href="/login">Sign-In</a>
+                    }
+                </div>
+                <a href="/Cart/Checkout" class="nav-link px-2 text-white">
+                    <span class="fa fa-shopping-cart"></span>
+                </a>
+            </div>
+        </nav>
+    </header> *@
+
+<div class="container">
+
+    <div class="p-4 d-flex justify-content-between">
+        
+        <div class="text-black d-flex "> <img src="~/img/icon.png"  class="small-img" /> <h1 >UCS</h1> </div>
+                    <div class="mt-4 ">
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <a class="btn btn-primary rounded-border" href="/logout">Log out</a>
+                }
+                else
+                {
+                        <a class="btn btn-primary rounded-border" href="/login">
+                            <i class="fa fa-arrow-right"></i> Login</a>
+                }
+            </div>
+        <div class="view-count text-primary  position-relative ">
+            <div>
+                <a href="/Cart/Checkout" class="nav-link px-2 text-muted">
+                    <span class="fa fa-shopping-cart"></span>
+                    <span class="cart-count text-muted" id="cartCount">
+                    </span>
+                </a>
+                
+            </div>
+          
+            
+        </div>
+    </div>
+    
+    <div class="row">
+        <section class="hero text-black col-md-6">
+            <div class="container">
+                <div class="bg-display p-3 rounded-border w-50 d-flex justify-content-around text-primary my-5">
+                  <span> More than faster</span>  <img src="~/img/cherry.png"/>
+ @* <img src="https://www.hull.ac.uk/assets/developer/static-templates/header/images/new/uoh-white.svg" width="50" alt="Unversity of Hull logo" class="d-inline-block align-top"> *@
+
+                </div>
+
+               
+                <h1 class="title-text"><span >Welcome</span> to University Catering System       </h1>
+                <p class="fs-5 me-5 my-3 text-black">Order delicious <span class="color-text">food</span> for your events and occasions with ease.</p>
+                <a href="#" class="btn btn-primary rounded-border">Explore Menu</a>
+            </div>
+        </section>
+            <div class="col-md-6">
+                <img src="~/img/food.png" class="app-image"/>
+            </div>
+      
+
+    </div>
+ 
+    <div class="container">
+        <h2 class="text-center mb-4">Our Menu</h2>
+        <!-- Bootstrap Carousel -->
+    </div>
+    <section class="row">
+
+        @foreach (var product in Model)
+        {
+            <div class="col-md-4 mb-3">
+                <div class="card">
+                    <img src="@product.imageUrl" class="card-img-top" alt="Product Image" style="height: 200px;object-fit: cover;object-position: center;">
+                    <div class="card-body">
+                        <h5 class="card-title">@product.Name</h5>
+                        <p class="card-text">Price: @product.Price</p>
+
+                        <button type="submit" class="btn btn-primary .add-to-cart-btn" id="clickAdd" onclick="addToCart(@product.Id)" data-id="@product.Id">Add to Cart</button>
+
+                    </div>
+                </div>
+            </div>
+        }
+    </section>
+</div>
+
+
+<script>
+    window.addEventListener("load", (event) => {
+        GetCartUpdate();
+    })
+    function GetCartUpdate(){
+      
+        $.ajax({
+            type: "Get",
+            url: "/Home/GetCart",
+            contentType: "application/json; charset=utf-8",
+            success: function (result, status, xhr) {
+                document.getElementById("cartCount").innerHTML = result.length;
+            },
+            error: function (xhr, status, error) {
+                $("#dataDiv").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
+            }
+        });
+  
+    }
+    
+    function addToCart(id) {
+        $.ajax({
+            type: "POST",
+            url: "/Cart/AddToCart",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(id),
+            success: function (result, status, xhr) {
+                toastr.success('Successfully Added to cart')
+               console.log(result)
+                GetCartUpdate()
+            },
+            error: function (xhr, status, error) {
+                $("#dataDiv").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
+            }
+        });
+        }
+  
+</script>
