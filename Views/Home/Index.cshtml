@@ -47,10 +47,10 @@
 
 <div class="container">
 
-    <div class="p-4 d-flex justify-content-between">
+    <div class="p-4 d-flex justify-content-between align-items-center">
         
-        <div class="text-black d-flex "> <img src="~/img/icon.png"  class="small-img" /> <h1 >UCS</h1> </div>
-                    <div class="mt-4 ">
+        <div class="text-black d-flex "> <img src="https://www.hull.ac.uk/assets/developer/static-templates/header/images/new/uoh-black.svg" class="small-img" />  </div>
+                    <div class="mt ">
                 @if (User.Identity.IsAuthenticated)
                 {
                     <a class="btn btn-primary rounded-border" href="/logout">Log out</a>
@@ -64,8 +64,8 @@
         <div class="view-count text-primary  position-relative ">
             <div>
                 <a href="/Cart/Checkout" class="nav-link px-2 text-muted">
-                    <span class="fa fa-shopping-cart"></span>
-                    <span class="cart-count text-muted" id="cartCount">
+                    <span class="fa fa-shopping-cart bg-display text-white fs-4 p-2"></span>
+                    <span class="cart-count text-white" id="cartCount">
                     </span>
                 </a>
                 
@@ -75,8 +75,8 @@
         </div>
     </div>
     
-    <div class="row">
-        <section class="hero text-black col-md-6">
+    <div class="d-flex justify-content-lg-between">
+        <section class="hero text-black ">
             <div class="container">
                 <div class="bg-display p-3 rounded-border w-50 d-flex justify-content-around text-primary my-5">
                   <span> More than faster</span>  <img src="~/img/cherry.png"/>
@@ -87,10 +87,10 @@
                
                 <h1 class="title-text"><span >Welcome</span> to University Catering System       </h1>
                 <p class="fs-5 me-5 my-3 text-black">Order delicious <span class="color-text">food</span> for your events and occasions with ease.</p>
-                <a href="#" class="btn btn-primary rounded-border">Explore Menu</a>
+                <a href="#" class="btn btn-primary rounded-border px-3 py-2">Explore Menu</a>
             </div>
         </section>
-            <div class="col-md-6">
+            <div class="d-sm-none d-md-block">
                 <img src="~/img/food.png" class="app-image"/>
             </div>
       
