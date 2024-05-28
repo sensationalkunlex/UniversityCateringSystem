@@ -62,28 +62,34 @@ a {
     border-color: #EB5757
 }
 .title-text {
-    font-size: 58px;
+    font-size: 80px;
     font-weight: 800;
     color: #333333;
 }
 .app-image {
-    background: radial-gradient(closest-side, #789b16, transparent);
-    height: 421px;
+    background: radial-gradient(closest-side, #eb5757c7, transparent);
+    height: 550px;
     clip-path: circle(50% at 50% 50%);
-    transform: rotate(178deg);
+    transform:rotate(360deg);
     animation: 8s linear 1s infinite alternate slidein;
 }
 .text-primary {
     color: #EB5757 !important;
 }
 @keyframes slidein{
-from {
+0% {
     transform: rotate(0);
-   
+    background: radial-gradient(closest-side, #eb5757c7, transparent);
 }
 
-    to {
+50% {
+    transform: rotate(180);
+    background: radial-gradient(closest-side, rgb(244 212 32 /69), transparent);
+    /* unset properties i.e. 'filter' will revert to default values */
+}
+    100% {
         transform: rotate(360);
+        background: radial-gradient(closest-side, #30af1994, transparent);
         /* unset properties i.e. 'filter' will revert to default values */
     }
 
@@ -152,7 +158,31 @@ a{
 .top-layer {
     height: 50vh;
 }
-user-view{
+.user-view{
     display:flex;
     justify-items:end;
+}
+@media (min-width: 1800px) {
+    .container, .container-lg, .container-md, .container-sm, .container-xl, .container-xxl {
+        max-width: 1800px;
+    }
+}
+.card{
+    border: 1px solid rgb(235 87 87 / 62%); 
+}
+@media (min-width: 1300px) {
+.navbar{
+    padding:10px 100px;
+    top:0;
+    justify-content:center;
+    gap:50px;
+    z-index:1;
+
+}
+}
+.img-food{
+    min-height: 57vh;
+    /* width: 52vw !important; */
+    object-fit: cover;
+    object-position: center;
 }

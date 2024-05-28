@@ -49,7 +49,7 @@
     @Html.Partial("~/Views/_partialView/_header.cshtml")
 </div>
 
-<div class="container mt-3">
+<div class="container mt-3 p-5">
     <div class="d-flex justify-content-lg-between">
         <section class="hero text-black ">
             <div class="container">
@@ -61,7 +61,7 @@
 
                
                 <h1 class="title-text"><span >Welcome</span> to University Catering System       </h1>
-                <p class="fs-5 me-5 my-3 text-black">Order delicious <span class="color-text">food</span> for your events and occasions with ease.</p>
+                <p class="fs-2 me-5 my-3 text-black">Order delicious <span class="color-text">food</span> for your events and occasions with ease.</p>
                 <a href="#" class="btn btn-primary rounded-border px-3 py-2">Explore Menu</a>
             </div>
         </section>
@@ -76,17 +76,21 @@
         <h2 class="text-center my-4">Our Menu</h2>
         <!-- Bootstrap Carousel -->
     </div>
-    <div class="container">
+    <div class="container p-4">
         <section class="row">
 
             @foreach (var product in Model)
             {
                 <div class="col-md-4 mb-3" id="clickAdd" onclick="addToCart(@product.Id)" data-id="@product.Id">
                     <div class="card">
-                        <img src="@product.imageUrl" class="card-img-top" alt="Product Image" style="height: 200px;object-fit: cover;object-position: center;">
-                        <div class="card-body">
-                            <h5 class="card-title">@product.Name</h5>
-                            <p class="card-text">Price: @product.Price</p>
+                        <img src="@product.imageUrl" class="card-img-top" alt="Product Image" style="height: 400px;object-fit: cover;object-position: center;">
+                        <div class="card-body text-center">
+                          
+                            <p class="card-text my-3 text-danger bold"> @string.Format(System.Globalization.CultureInfo.GetCultureInfo("en-GB"), "{0:C}", @product.Price)</p>
+                              <h4 class="card-title">@product.Name</h4>
+                            <p class="card-text my-3">
+                                @product.Description
+                            </p>
 
                             
 
