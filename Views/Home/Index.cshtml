@@ -45,41 +45,16 @@
         </nav>
     </header> *@
 
-<div class="container">
+<div class="w-lg-25 container">
+    @Html.Partial("~/Views/_partialView/_header.cshtml")
+</div>
 
-    <div class="p-4 d-flex justify-content-between align-items-center">
-        
-        <div class="text-black d-flex "> <img src="https://www.hull.ac.uk/assets/developer/static-templates/header/images/new/uoh-black.svg" class="small-img" />  </div>
-                    <div class="mt ">
-                @if (User.Identity.IsAuthenticated)
-                {
-                    <a class="btn btn-primary rounded-border" href="/logout">Log out</a>
-                }
-                else
-                {
-                        <a class="btn btn-primary rounded-border" href="/login">
-                            <i class="fa fa-arrow-right"></i> Login</a>
-                }
-            </div>
-        <div class="view-count text-primary  position-relative ">
-            <div>
-                <a href="/Cart/Checkout" class="nav-link px-2 text-muted">
-                    <span class="fa fa-shopping-cart bg-display text-white fs-4 p-2"></span>
-                    <span class="cart-count text-white" id="cartCount">
-                    </span>
-                </a>
-                
-            </div>
-          
-            
-        </div>
-    </div>
-    
+<div class="container mt-3">
     <div class="d-flex justify-content-lg-between">
         <section class="hero text-black ">
             <div class="container">
                 <div class="bg-display p-3 rounded-border w-50 d-flex justify-content-around text-primary my-5">
-                  <span> More than faster</span>  <img src="~/img/cherry.png"/>
+                  <span> More than Faster</span>  <img src="~/img/cherry.png"/>
  @* <img src="https://www.hull.ac.uk/assets/developer/static-templates/header/images/new/uoh-white.svg" width="50" alt="Unversity of Hull logo" class="d-inline-block align-top"> *@
 
                 </div>
@@ -90,7 +65,7 @@
                 <a href="#" class="btn btn-primary rounded-border px-3 py-2">Explore Menu</a>
             </div>
         </section>
-        <div class="d-md-none  d-sm-none d-lg-block">
+        <div class="d-none d-lg-block">
                 <img src="~/img/food.png" class="app-image"/>
             </div>
       
@@ -98,27 +73,30 @@
     </div>
  
     <div class="container">
-        <h2 class="text-center mb-4">Our Menu</h2>
+        <h2 class="text-center my-4">Our Menu</h2>
         <!-- Bootstrap Carousel -->
     </div>
-    <section class="row">
+    <div class="container">
+        <section class="row">
 
-        @foreach (var product in Model)
-        {
-            <div class="col-md-4 mb-3">
-                <div class="card">
-                    <img src="@product.imageUrl" class="card-img-top" alt="Product Image" style="height: 200px;object-fit: cover;object-position: center;">
-                    <div class="card-body">
-                        <h5 class="card-title">@product.Name</h5>
-                        <p class="card-text">Price: @product.Price</p>
+            @foreach (var product in Model)
+            {
+                <div class="col-md-4 mb-3" id="clickAdd" onclick="addToCart(@product.Id)" data-id="@product.Id">
+                    <div class="card">
+                        <img src="@product.imageUrl" class="card-img-top" alt="Product Image" style="height: 200px;object-fit: cover;object-position: center;">
+                        <div class="card-body">
+                            <h5 class="card-title">@product.Name</h5>
+                            <p class="card-text">Price: @product.Price</p>
 
-                        <button type="submit" class="btn btn-primary .add-to-cart-btn" id="clickAdd" onclick="addToCart(@product.Id)" data-id="@product.Id">Add to Cart</button>
+                            
 
+                        </div>
                     </div>
                 </div>
-            </div>
-        }
-    </section>
+            }
+        </section>
+    </div>
+   
 </div>
 
 
@@ -143,20 +121,21 @@
     }
     
     function addToCart(id) {
-        $.ajax({
-            type: "POST",
-            url: "/Cart/AddToCart",
-            contentType: "application/json; charset=utf-8",
-            data: JSON.stringify(id),
-            success: function (result, status, xhr) {
-                toastr.success('Successfully Added to cart')
-               console.log(result)
-                GetCartUpdate()
-            },
-            error: function (xhr, status, error) {
-                $("#dataDiv").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
-            }
-        });
+        window.location.href=`/cart/food/${id}`
+        // $.ajax({
+        //     type: "POST",
+        //     url: "/Cart/AddToCart",
+        //     contentType: "application/json; charset=utf-8",
+        //     data: JSON.stringify(id),
+        //     success: function (result, status, xhr) {
+        //         toastr.success('Successfully Added to cart')
+        //        console.log(result)
+        //         GetCartUpdate()
+        //     },
+        //     error: function (xhr, status, error) {
+        //         $("#dataDiv").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
+        //     }
+        // });
         }
   
 </script>

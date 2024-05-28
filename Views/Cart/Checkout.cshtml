@@ -3,25 +3,22 @@
 }
 
 <div class="container pt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-7">
-            <div class="table-responsive">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th scope="col">Product Details</th>
-                            <th scope="col">Quantity</th>
-                            <th scope="col">Product Price</th>
-                            <th scope="col">Total</th>
-                        </tr>
-                    </thead>
-                    <tbody id="cart-items">
-                        <!-- Cart items will be populated here by JavaScript -->
-                    </tbody>
-                </table>
-            </div>
+    <div class="w-lg-25 container mb-5">
+        @Html.Partial("~/Views/_partialView/_header.cshtml")
+    </div>
+    <div class="table-responsive">
+
+
+        <div id="cart-items">
+            <!-- Cart items will be populated here by JavaScript -->
         </div>
-        <div class="col-md-5 justify-content-end mt-4">
+
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-md-12">
+           
+        </div>
+        <div class=" my-4">
             <div>
                 <article class="card">
                     <h1 class="fs-5 text-center card-header">CART SUMMARY</h1>
@@ -30,13 +27,9 @@
                         <p class="fs-6 text-center" id="cart-subtotal">@string.Format(System.Globalization.CultureInfo.GetCultureInfo("en-GB"), "{0:C}", 0)</p>
                     </div>
                     <div class="text-center">
-                        <div>
-                            <a href="/checkout" class="btn btn-warning  text-center m-3"><i class="fa fa-paypal" aria-hidden="true"></i>
-                                <span class="text-blue">Pay</span><span class="">Pal</span> 
-                            </a>
-                        </div>
-                        <div>
-                            <a href="/checkout" class="btn btn-danger fs-6 text-center m-3">Pay later </a>
+                        
+                        <div class="m-3 ">
+                            <a href="/checkout" class="btn btn-outline-danger fs-6 text-center py-2 px-3">Checkout </a>
                         </div>
                     </div>
                 </article>
@@ -68,7 +61,7 @@
         }
     document.addEventListener('click', function (event) {
         if (event.target.closest('.increment-quantity')) {
-            var itemId = event.target.closest('tr').getAttribute('data-item-id');
+            var itemId = event.target.closest('#clickBtn').getAttribute('data-item-id');
             updateCartItem(itemId, true);
         }
     });
@@ -76,7 +69,7 @@
     // Event handler for decrement button
     document.addEventListener('click', function (event) {
         if (event.target.closest('.decrement-quantity')) {
-            var itemId = event.target.closest('tr').getAttribute('data-item-id');
+            var itemId = event.target.closest('#clickBtn').getAttribute('data-item-id');
             updateCartItem(itemId, false);
         }
     });
@@ -88,31 +81,36 @@
             tbody.empty();
             cartItems.forEach(function (item) {
                 tbody.append(`
-                        <tr data-item-id="${item.id}">
-                            <td>${item.productName}</td>
-                            <td>
-                                <span class="d-flex">
-                                    <button class="btn btn-sm mx-2 btn-outline-success decrement-quantity"><i class="fa fa-minus"></i></button>
+                        <div data-item-id="${item.id}" class="d-flex justify-content-between align-items-center" id="clickBtn">
+                                      <img src="${item.imageUrl}" class="w-15" /> 
+                                    <div class="w-40">${item.productName}</div>
+                                <div>
+                                <span class="d-flex w-15">
+                                            <div class="  mx-3  decrement-quantity"><i class="fa fa-minus"></i></div>
                                     <span class="item-quantity">${item.quantity}</span>
-                                    <button class="btn btn-sm mx-2 btn-outline-success increment-quantity"><i class="fa fa-plus"></i></button>
+                                                    <div class=" mx-2  increment-quantity"><i class="fa fa-plus"></i></div>
                                 </span>
-                            </td>
-                            <td>${item.priceFormatted}</td>
-                            <td class="item-total">${item.itemTotalFormatted}</td>
-                        </tr>
+                                </div>
+                                    <div class="w-15">${item.priceFormatted}</div>
+                                    <div class="w-15">${item.itemTotalFormatted}</div>
+                        </div>
+                        <hr/>
                     `);
             });
         }
 
         // Function to update cart item via AJAX
         function updateCartItem(itemId, action) {
+
             $.ajax({
             url: '/Cart/AddReduceMore',
                 type: 'POST',
             data: { productId: itemId, isActionAdd: action },
                 success: function (response) {
                     if (response.success) {
+
                     loadCart();
+
                 } else {
                         alert('Failed to update the cart.');
                     }

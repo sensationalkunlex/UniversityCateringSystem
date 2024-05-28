@@ -1,0 +1,36 @@
+﻿
+<div class="p-4 d-flex justify-content-center align-items-center gap-5">
+   
+    <div class="text-black d-flex "> <img src="https://www.hull.ac.uk/assets/developer/static-templates/header/images/new/uoh-black.svg" class="small-img" />  </div>
+    <div class="mt ">
+        @if (User.Identity.IsAuthenticated)
+        {
+            <a class="btn btn-primary rounded-border" href="/logout">Log out</a>
+        }
+        else
+        {
+            <a class="btn btn-primary rounded-border" href="/login">
+                <i class="fa fa-arrow-right"></i>| Login
+            </a>
+        }
+    </div>
+   
+    <div class="text-black fs-5">
+        <a class="" href="/">Shop</a>
+    </div>
+    <div class="text-black fs-5">
+        <a class="" href="/">About</a>
+    </div>
+    <div class="view-count text-primary  position-relative ">
+        <div>
+            <a href="/Cart/Checkout" class="nav-link px-2 text-muted">
+                <span class="fa fa-shopping-cart bg-display-1 text-white fs-4 p-2"></span>
+                <span class="cart-count text-white" id="cartCount">
+                </span>
+            </a>
+
+        </div>
+
+
+    </div>
+</div>

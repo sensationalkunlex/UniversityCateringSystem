@@ -41,6 +41,7 @@ namespace UniversityCateringSystem.Controllers
             {
                 ProductId = productId,
                 ProductName =product.Name,
+                ImageUrl=product.imageUrl,
                 Price = product.Price,
                 Quantity = 1
             });
@@ -79,6 +80,7 @@ namespace UniversityCateringSystem.Controllers
                 {
                     ProductId = product.Id,
                     ProductName = product.Name,
+                    ImageUrl= product.imageUrl,
                     Price = product.Price,
                     Quantity = 1
                 });
@@ -98,6 +100,7 @@ namespace UniversityCateringSystem.Controllers
                     id = item.ProductId,
                     productName = item.ProductName,
                     quantity = item.Quantity,
+                    imageUrl= item.ImageUrl,
                     priceFormatted = string.Format(System.Globalization.CultureInfo.GetCultureInfo("en-GB"), "{0:C}", item.Price),
                     itemTotalFormatted = string.Format(System.Globalization.CultureInfo.GetCultureInfo("en-GB"), "{0:C}", item.Quantity * item.Price)
                 }).ToList(),
@@ -142,6 +145,34 @@ namespace UniversityCateringSystem.Controllers
         {
             
             return View();
+        }
+        public async Task<ActionResult> Food(int Id)
+        {
+            List<CartItem> cart = HttpContext.Session.GetObjectFromJson<List<CartItem>>("Cart") ?? new List<CartItem>();
+
+            var checkCart = await Task.Run(() => cart.FirstOrDefault(x => x.ProductId == Id));
+
+            if (checkCart == null)
+            {
+                var GetProduct = await _productServices.GetProductsById(Id);
+                if (GetProduct != null)
+                {
+                    checkCart = new CartItem
+                    {
+                        ProductId = GetProduct.Id,
+                        ProductName = GetProduct.Name,
+                        Price = GetProduct.Price,
+                        Quantity = 1,
+                        ImageUrl=GetProduct.imageUrl
+                    };
+                    cart.Add(checkCart);
+                }
+            }
+
+            HttpContext.Session.SetObjectAsJson("Cart", cart);
+
+            return View(checkCart);
+
         }
     }
 }

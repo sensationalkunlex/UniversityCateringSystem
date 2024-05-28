@@ -1,0 +1,62 @@
+﻿@model CartItem
+
+<section id="pdp" class="container ">
+    <div class="w-lg-25 container mb-5">
+        @Html.Partial("~/Views/_partialView/_header.cshtml")
+    </div>
+    <div class="product-name mb-5">
+        <a href="/">Shop</a> >
+        @Model.ProductName
+    </div>
+   <div class="row mt-5">
+       <div class="col-md-6">
+           
+           <img src="@Model.ImageUrl" class="w-100 mb-5 vh-50"/>
+          
+       </div>
+        <div class="col-md-6">
+            <div class="m-5 d-flex flex-column justify-content-center align-content-center">
+                <h3 class="my-4">
+                    @Model.ProductName
+                </h3>
+                <h5 class="mb-4">
+                    @string.Format(System.Globalization.CultureInfo.GetCultureInfo("en-GB"), "{0:C}", Model.Price)
+                </h5>
+                <div class="d-flex flex-column mb-4">
+                    <div class="mb-1">
+                        Quantity
+                    </div>
+                    <input type="number" min="1" size="4" step="1" class="form-control w-25 py-2" />
+                </div>
+                <div>
+                    <button class="btn btn-outline-danger w-75 py-2 ">
+                        ADD TO CART
+                    </button>
+                </div>
+               
+                
+            </div>
+        </div>
+   </div>
+
+</section>
+<script>
+    window.addEventListener("load", (event) => {
+        GetCartUpdate();
+    })
+    function GetCartUpdate() {
+
+        $.ajax({
+            type: "Get",
+            url: "/Home/GetCart",
+            contentType: "application/json; charset=utf-8",
+            success: function (result, status, xhr) {
+                document.getElementById("cartCount").innerHTML = result.length;
+            },
+            error: function (xhr, status, error) {
+                $("#dataDiv").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
+            }
+        });
+
+    }
+  </script>
