@@ -1,8 +1,10 @@
 
+using UniversityCateringSystem.Models;
+
 namespace UniversityCateringSystem.Controllers
 {
-    internal interface IUserService
+    public interface IUserService
     {
-        Task GetUserByEmailAsync(string email);
+        Task<User> GetUserByEmailAsync(string email);
     }
 }

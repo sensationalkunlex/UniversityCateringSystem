@@ -3,11 +3,12 @@
 
 namespace UniversityCateringSystem.Controllers
 {
-        Task<bool> ValidateOtpAsync(object id, string otp);
-    internal interface IOtpService
-        Task SaveOtpAsync(object id, object otp);
+        
+    public interface IOtpService
+        
     {
-        Task<bool> ValidateOtpAsync(object id, string otp);
-        object GenerateOtp();
+        Task<bool> ValidateOtpAsync(Guid id, string otp);
+        string GenerateOtp();
+        Task SaveOtpAsync(Guid id, string otp);
     }
 }

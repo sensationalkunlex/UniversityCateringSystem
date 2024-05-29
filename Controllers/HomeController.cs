@@ -21,7 +21,7 @@ namespace UniversityCateringSystem.Controllers
    
             _product.SeedData();
             var products =await _product.GetProducts();
-          // await _product.ApplicationUpdateAsync();
+           _product.SendMail();
             return View(products);
         }
         public async Task<IActionResult> GetCart()

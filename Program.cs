@@ -10,12 +10,11 @@ namespace UniversityCateringSystem
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            builder.Services.AddDbContext<AppDbContext>(options =>
+            options.UseSqlite(builder.Configuration.GetConnectionString("WebApiDatabase")));
+
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-            
-builder.Services.AddDbContext<AppDbContext>(options =>
-options.UseSqlite(builder.Configuration.GetConnectionString("WebApiDatabase")));
-            builder.Services.AddDistributedMemoryCache();
 
             builder.Services.AddSession(options =>
             {
@@ -23,8 +22,9 @@ options.UseSqlite(builder.Configuration.GetConnectionString("WebApiDatabase")));
                 options.Cookie.HttpOnly = true;
             });
             builder.Services.AddScoped<IProductServices, ProductServices>();
+            builder.Services.AddScoped<IPayPalService, PayPalService>();
             builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-
+           
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

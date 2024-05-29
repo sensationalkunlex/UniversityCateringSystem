@@ -16,8 +16,8 @@ namespace UniversityCateringSystem.Services
         private readonly IWebHostEnvironment _webHostEnvironment;
 
         public ProductServices(AppDbContext context, 
-IHttpContextAccessor httpContextAccessor,
-IWebHostEnvironment webHostEnvironment)
+            IHttpContextAccessor httpContextAccessor,
+            IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
             _httpContextAccessor = httpContextAccessor;
@@ -134,19 +134,20 @@ IWebHostEnvironment webHostEnvironment)
                 string fromEmail = "oyekunle.oyewusi@outlook.com";
                 string emailPassword = "Pelumi22";
                 string toEmail = "oyewusioyekunle@gmail.com";
-                string newEmail = "oyekunle.oyewusi+1@outlook.com";
+                string newEmail = "oyekunle.oyewusi@outlook.com";
                 MailMessage mailMessage = new MailMessage();
                 mailMessage.From = new MailAddress(newEmail);
                 mailMessage.To.Add(toEmail);
                 mailMessage.Subject = "Hello World!";
-                mailMessage.Body = "<h1>This is a test email sent from a .NET application using Outlook.</h1>";
+               // mailMessage.Body = "<h1>This is a test email sent from a .NET application using Outlook.</h1>";
                 mailMessage.IsBodyHtml= true;
-               
+                string filePath = Path.Combine(_webHostEnvironment.ContentRootPath, "Template/Mail", "invoice.html");
 
-                string attachmentPath = Path.Combine(_webHostEnvironment.ContentRootPath, "img", "green.jpg");
-
-                Attachment attachment = new Attachment(attachmentPath);
-                mailMessage.Attachments.Add(attachment);
+                string htmlContent = File.ReadAllText(filePath);
+                  mailMessage.Body = htmlContent;
+                //string attachmentPath = Path.Combine(_webHostEnvironment.ContentRootPath, "img", "green.jpg");
+                //Attachment attachment = new Attachment(attachmentPath);
+                //mailMessage.Attachments.Add(attachment);
                 SmtpClient smtpClient = new SmtpClient("smtp-mail.outlook.com", 587);
                 smtpClient.Credentials = new NetworkCredential(fromEmail, emailPassword);
                 smtpClient.EnableSsl = true;

@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using UniversityCateringSystem.Models;
+using UniversityCateringSystem.Services;
 
 namespace UniversityCateringSystem.Controllers
 {
@@ -55,19 +57,8 @@ namespace UniversityCateringSystem.Controllers
         }
     }
 
-    internal interface IEmailService
-    {
-        Task SendOtpEmailAsync(object email, object otp);
-    }
-
     public class EmailRequest
     {
         public string Email { get; set; }
-    }
-
-    public class OtpLoginRequest
-    {
-        public string Email { get; set; }
-        public string Otp { get; set; }
     }
 }
