@@ -52,9 +52,12 @@ namespace UniversityCateringSystem.Controllers
             return Json(cart);
         }
         [HttpPost]
-        public async Task<IActionResult> AddReduceMore( int productId, bool isActionAdd)
+        public async Task<IActionResult> AddReduceMore( int productId, bool isActionAdd, bool newQty=false)
         {
             var product = await _productServices.GetProductsById(productId);
+            if(newQty){
+
+            }
             // Retrieve cart from session or database
             var cart = new List<CartItem>();
             if (isActionAdd)

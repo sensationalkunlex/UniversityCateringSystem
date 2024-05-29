@@ -68,10 +68,23 @@
 
     // Event handler for decrement button
     document.addEventListener('click', function (event) {
-        if (event.target.closest('.decrement-quantity')) {
-            var itemId = event.target.closest('#clickBtn').getAttribute('data-item-id');
-            updateCartItem(itemId, false);
+       if (event.target.closest('.decrement-quantity')) {
+        var itemElement = event.target.closest('.cart-item'); // Assuming each item is within a .cart-item element
+        var itemId = itemElement.getAttribute('data-item-id');
+        var itemQuantityElement = itemElement.querySelector('.item-quantity');
+        
+        // Assuming the quantity is stored as text content in the .item-quantity element
+        var itemQuantity = parseInt(itemQuantityElement.textContent, 10);
+
+        // Decrement the quantity (if applicable) and update the DOM or perform further actions
+        if (itemQuantity > 0) {
+            itemQuantity -= 1;
+            itemQuantityElement.textContent = itemQuantity;
         }
+        
+        // Call your updateCartItem function with the updated quantity
+        updateCartItem(itemId, false);
+    }
     });
 
 
@@ -100,12 +113,12 @@
         }
 
         // Function to update cart item via AJAX
-        function updateCartItem(itemId, action) {
+        function updateCartItem(itemId, action, newQty) {
 
             $.ajax({
             url: '/Cart/AddReduceMore',
                 type: 'POST',
-            data: { productId: itemId, isActionAdd: action },
+            data: { productId: itemId, isActionAdd: action, newQty },
                 success: function (response) {
                     if (response.success) {
 
