@@ -58,7 +58,7 @@ namespace UniversityCateringSystem.Controllers
             // Retrieve cart from session or database
             var cart = new List<CartItem>();
             if (isActionAdd)
-                cart = AddToCart(product);
+                cart = AddSingleToCart(product);
             else
                 cart = RemoveFromCart(product);
             // Update session
@@ -66,7 +66,7 @@ namespace UniversityCateringSystem.Controllers
 
             return Json(new { success=true});
         }
-        private List<CartItem> AddToCart(Product product)
+        private List<CartItem> AddSingleToCart(Product product)
         {
             var cart = HttpContext.Session.GetObjectFromJson<List<CartItem>>(Cart) ?? new List<CartItem>(); ;
             CartItem? checkCart = FetchCart(product);
@@ -146,6 +146,35 @@ namespace UniversityCateringSystem.Controllers
             
             return View();
         }
+        [HttpPost]
+        public async Task<ActionResult> AddToCartUpdateAsync( [FromBody] CartItem cartItem)
+        {
+        var product = await _productServices.GetProductsById(cartItem.ProductId);
+        product.Qty=cartItem.Quantity;
+        AddAllToCart(product);
+        return Ok(new { message = "Product added to cart successfully!" +JsonSerializer.Serialize(cartItem) });
+        }
+        private void AddAllToCart(Product product)
+        {
+            var cart = HttpContext.Session.GetObjectFromJson<List<CartItem>>(Cart) ?? new List<CartItem>(); ;
+            CartItem? checkCart = FetchCart(product);
+            // Add new item to cart
+            if (checkCart != null)
+            {
+                cart.First(x => x.ProductId == product.Id).Quantity=product.Qty;
+            }
+            else
+                cart.Add(new CartItem
+                {
+                    ProductId = product.Id,
+                    ProductName = product.Name,
+                    ImageUrl= product.imageUrl,
+                    Price = product.Price,
+                    Quantity = product.Qty
+                });
+            HttpContext.Session.SetString(Cart, JsonSerializer.Serialize(cart));
+        }
+        
         public async Task<ActionResult> Food(int Id)
         {
             List<CartItem> cart = HttpContext.Session.GetObjectFromJson<List<CartItem>>("Cart") ?? new List<CartItem>();
@@ -162,10 +191,10 @@ namespace UniversityCateringSystem.Controllers
                         ProductId = GetProduct.Id,
                         ProductName = GetProduct.Name,
                         Price = GetProduct.Price,
-                        Quantity = 1,
+                        Quantity = 0,
                         ImageUrl=GetProduct.imageUrl
                     };
-                    cart.Add(checkCart);
+                
                 }
             }
 

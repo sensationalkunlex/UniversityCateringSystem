@@ -12,9 +12,9 @@ namespace UniversityCateringSystem
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-            builder.Services.AddDbContext<AppDbContext>(options =>
-             options.UseInMemoryDatabase(databaseName: "InMemoryProductsDb"));
-
+            
+builder.Services.AddDbContext<AppDbContext>(options =>
+options.UseSqlite(builder.Configuration.GetConnectionString("WebApiDatabase")));
             builder.Services.AddDistributedMemoryCache();
 
             builder.Services.AddSession(options =>

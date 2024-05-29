@@ -40,3 +40,23 @@
  
 </nav>
 </div>
+<script>
+    window.addEventListener("load", (event) => {
+        GetCartUpdate();
+    })
+    function GetCartUpdate() {
+
+        $.ajax({
+            type: "Get",
+            url: "/Home/GetCart",
+            contentType: "application/json; charset=utf-8",
+            success: function (result, status, xhr) {
+                document.getElementById("cartCount").innerHTML = result.length;
+            },
+            error: function (xhr, status, error) {
+                $("#dataDiv").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
+            }
+        });
+
+    }
+  </script>
