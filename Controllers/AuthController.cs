@@ -5,9 +5,8 @@ using UniversityCateringSystem.Services;
 
 namespace UniversityCateringSystem.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class AuthController : ControllerBase
+ 
+    public class AuthController : Controller
     {
         private readonly IEmailService _emailService;
         private readonly IUserService _userService;
@@ -20,7 +19,6 @@ namespace UniversityCateringSystem.Controllers
             _otpService = otpService;
         }
 
-        [HttpPost("request-otp")]
         public async Task<IActionResult> RequestOtp([FromBody] EmailRequest request)
         {
             var user = await _userService.GetUserByEmailAsync(request.Email);
@@ -35,8 +33,13 @@ namespace UniversityCateringSystem.Controllers
 
             return Ok();
         }
+        
+        public IActionResult Login( string UrlReturn)
+        {
+             return View();
+        }
 
-        [HttpPost("login")]
+        [HttpPost]
         public async Task<IActionResult> Login([FromBody] OtpLoginRequest request)
         {
             var user = await _userService.GetUserByEmailAsync(request.Email);
@@ -53,7 +56,7 @@ namespace UniversityCateringSystem.Controllers
 
             // Perform login logic (e.g., generate token, set cookie, etc.)
 
-            return Ok(new { message = "Login successful." });
+            return Json(new { message = "Login successful." });
         }
     }
 

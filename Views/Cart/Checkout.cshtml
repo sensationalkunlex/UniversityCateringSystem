@@ -3,8 +3,8 @@
 }
 
 <div class="container pt-5">
-    <div class="w-lg-25 container mb-5">
-        @Html.Partial("~/Views/_partialView/_header.cshtml")
+    <div class="w-lg-25 container mb-5" id="header-container">
+
     </div>
     <div class="table-responsive">
 
@@ -41,6 +41,7 @@
 <script>
     window.addEventListener("load", (event) => {
         loadCart();
+        loadPiD();
     })
         function loadCart() {
             $.ajax({
@@ -69,7 +70,7 @@
     // Event handler for decrement button
     document.addEventListener('click', function (event) {
        if (event.target.closest('.decrement-quantity')) {
-        var itemElement = event.target.closest('.cart-item'); // Assuming each item is within a .cart-item element
+            var itemElement = event.target.closest('#clickBtn'); // Assuming each item is within a .cart-item element
         var itemId = itemElement.getAttribute('data-item-id');
         var itemQuantityElement = itemElement.querySelector('.item-quantity');
         
@@ -77,16 +78,33 @@
         var itemQuantity = parseInt(itemQuantityElement.textContent, 10);
 
         // Decrement the quantity (if applicable) and update the DOM or perform further actions
-        if (itemQuantity > 0) {
-            itemQuantity -= 1;
-            itemQuantityElement.textContent = itemQuantity;
+        if (itemQuantity == 1) {
+            return;
         }
         
         // Call your updateCartItem function with the updated quantity
         updateCartItem(itemId, false);
     }
     });
-
+    document.addEventListener('click', function (event) {
+        if (event.target.closest('.fa-close')) {
+            var itemElement = event.target.closest('#clickBtn'); // Assuming each item is within a .cart-item element
+            var itemId = itemElement.getAttribute('data-item-id');
+           updateCartItem(itemId, false,true);
+        }
+    });
+  function loadPiD  () {
+        $.ajax({
+            url: '@Url.Action("LoadHeader", "Home")',
+            type: 'GET',
+            success: function (data) {
+                $('#header-container').html(data);
+            },
+            error: function (xhr, status, error) {
+                console.error("Error loading partial view:", status, error);
+            }
+        });
+    }
 
         // Function to render cart items
         function renderCartItems(cartItems) {
@@ -106,6 +124,8 @@
                                 </div>
                                     <div class="w-15">${item.priceFormatted}</div>
                                     <div class="w-15">${item.itemTotalFormatted}</div>
+
+                                        <div class="w-5"><i class="fa fa-close text-black">X</i></div>
                         </div>
                         <hr/>
                     `);
@@ -113,7 +133,7 @@
         }
 
         // Function to update cart item via AJAX
-        function updateCartItem(itemId, action, newQty) {
+        function updateCartItem(itemId, action, newQty=false) {
 
             $.ajax({
             url: '/Cart/AddReduceMore',
@@ -123,6 +143,7 @@
                     if (response.success) {
 
                     loadCart();
+                        loadPiD();
 
                 } else {
                         alert('Failed to update the cart.');

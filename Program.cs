@@ -1,4 +1,7 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
+using UniversityCateringSystem.AuthService;
 using UniversityCateringSystem.Data;
 using UniversityCateringSystem.Services;
 
@@ -24,7 +27,16 @@ namespace UniversityCateringSystem
             builder.Services.AddScoped<IProductServices, ProductServices>();
             builder.Services.AddScoped<IPayPalService, PayPalService>();
             builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-           
+            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                 .AddCookie(config =>
+                 {
+
+                     config.Cookie.Name = "UserLoginCookie"; // Name of cookie   
+                     config.LoginPath = "/Auth/login"; // Path for the redirect to user login page  
+                     config.AccessDeniedPath = "/Login/UserAccessDenied";
+                     config.ExpireTimeSpan = TimeSpan.FromMinutes(20);
+                 });
+            builder.Services.AddScoped<IAuthorizationHandler, RolesAuthorizationHandler>();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

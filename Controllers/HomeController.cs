@@ -16,6 +16,10 @@ namespace UniversityCateringSystem.Controllers
             _product = product;
         }
 
+        public ActionResult LoadHeader()
+        {
+            return PartialView("~/Views/_partialView/_header.cshtml");
+        }
         public async Task<IActionResult> Index()
         {
    

@@ -56,7 +56,7 @@ namespace UniversityCateringSystem.Controllers
         {
             var product = await _productServices.GetProductsById(productId);
             if(newQty){
-
+                RemoveCart(product);
             }
             // Retrieve cart from session or database
             var cart = new List<CartItem>();
@@ -156,6 +156,18 @@ namespace UniversityCateringSystem.Controllers
         product.Qty=cartItem.Quantity;
         AddAllToCart(product);
         return Ok(new { message = "Product added to cart successfully!" +JsonSerializer.Serialize(cartItem) });
+        }
+        private void RemoveCart(Product product)
+        {
+            var cart = HttpContext.Session.GetObjectFromJson<List<CartItem>>(Cart) ?? new List<CartItem>(); ;
+            CartItem? checkCart = FetchCart(product);
+            // Add new item to cart
+            if (checkCart != null)
+            {
+                cart.RemoveAll(x=>x.ProductId==checkCart.ProductId);
+            }
+          
+            HttpContext.Session.SetString(Cart, JsonSerializer.Serialize(cart));
         }
         private void AddAllToCart(Product product)
         {

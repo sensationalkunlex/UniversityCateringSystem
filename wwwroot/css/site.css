@@ -150,10 +150,13 @@ a{
     height: 35vh;
 }
 .w-15{
-    width:15%;
+    width:14%;
 }
 .w-40 {
-    width: 40%;
+    width: 38%;
+}
+.w-5 {
+    width: 5%;
 }
 .top-layer {
     height: 50vh;
