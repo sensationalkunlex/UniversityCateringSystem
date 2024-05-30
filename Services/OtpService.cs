@@ -46,8 +46,12 @@ namespace UniversityCateringSystem.Controllers
 
         public async Task<bool> ValidateOtpAsync(string email, string otp)
         {
-            var twoHoursAgo = DateTime.UtcNow.AddHours(-2);
-          return await _context.OtpLoginRequests.FirstOrDefaultAsync(x => x.Email == email && x.CreatedAt >= twoHoursAgo && x.IsValid==true)!=null;
+          var twoHoursAgo = DateTime.UtcNow.AddHours(-2);
+          return await _context.OtpLoginRequests
+                .FirstOrDefaultAsync(x => 
+                x.Email == email && 
+                x.CreatedAt >= twoHoursAgo &&
+                x.IsValid==true && x.Otp==otp )!=null;
 
         }
     }

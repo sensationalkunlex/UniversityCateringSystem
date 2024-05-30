@@ -89,7 +89,7 @@ namespace UniversityCateringSystem.Controllers
             // Perform login logic (e.g., generate token, set cookie, etc.)
             if(!string.IsNullOrEmpty(request.returnUrl))
             {
-                return RedirectToAction(request.returnUrl);
+                return Redirect(request.returnUrl);
             }
             return RedirectToAction("Index", "Home");
         }
