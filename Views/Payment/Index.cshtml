@@ -2,20 +2,18 @@
     ViewBag.Title = "Cart";
 }
 
-<div class="container">
+<div class="container pt-5">
     <div class="w-lg-25 container mb-5" id="header-container">
         @Html.Partial("~/Views/_partialView/_header.cshtml")
     </div>
     <div class="table-responsive">
-
-
         <div id="cart-items">
-            <!-- Cart items will be populated here by JavaScript -->
+           
         </div>
 
     </div>
     <div class="row justify-content-center">
-        <div class="col-md-12">
+        <div class="col-md-5">
         </div>
         <div class=" my-4" id="cart">
             <div>
@@ -28,7 +26,10 @@
                     <div class="text-center">
 
                         <div class="m-3 ">
-                            <a href="/payment" class="btn btn-outline-secondary fs-4 text-center py-3 px-5">Checkout </a>
+                            <a class="btn  btn-warning fs-4 text-center py-3 px-5 fs-4 text-center py-3 px-5" asp-action="PaymentWithPaypal" asp-controller="Payment">PAY WITH <img src="~/img/paypal.svg"/> </a>
+                        </div>
+                         <div class="m-3 ">
+                            <a class="btn  btn-outline-secondary fs-4 text-center py-3 px-5 fs-4 text-center py-3 px-5" asp-action="PaymentWithPaypal" asp-controller="Payment">PAY AT COUNTER </a>
                         </div>
                     </div>
                 </article>
@@ -39,7 +40,7 @@
                 <article class="card">
                     <h1 class="fs-5 text-center card-header"></h1>
                     <div class="card-body  text-center">
-                        <img src="~/img/empty.svg"/>
+                        <img src="~/img/empty.svg" />
                         <h6> Your cart is empty! </h6>
                         <div> Browse our categories and discover our best deals </div>
                     </div>
@@ -139,23 +140,23 @@
         tbody.empty();
         cartItems.forEach(function (item) {
             tbody.append(`
-                            <div data-item-id="${item.id}" class="d-flex justify-content-between align-items-center" id="clickBtn">
-                                          <img src="${item.imageUrl}" class="w-15" />
-                                        <div class="w-40">${item.productName}</div>
-                                    <div>
-                                    <span class="d-flex w-15">
-                                                <div class="  mx-3  decrement-quantity"><i class="fa fa-minus"></i></div>
-                                        <span class="item-quantity">${item.quantity}</span>
-                                                        <div class=" mx-2  increment-quantity"><i class="fa fa-plus"></i></div>
-                                    </span>
-                                    </div>
-                                        <div class="w-15">${item.priceFormatted}</div>
-                                        <div class="w-15">${item.itemTotalFormatted}</div>
+                                    <div data-item-id="${item.id}" class="d-flex justify-content-between align-items-center" id="clickBtn">
+                                                  <img src="${item.imageUrl}" class="w-15" />
+                                                <div class="w-40">${item.productName}</div>
+                                            <div>
+                                            <span class="d-flex w-15">
+                                                        <div class="  mx-3  decrement-quantity"><i class="fa fa-minus"></i></div>
+                                                <span class="item-quantity">${item.quantity}</span>
+                                                                <div class=" mx-2  increment-quantity"><i class="fa fa-plus"></i></div>
+                                            </span>
+                                            </div>
+                                                <div class="w-15">${item.priceFormatted}</div>
+                                                <div class="w-15">${item.itemTotalFormatted}</div>
 
-                                            <div class="w-5"><i class="fa fa-close text-black fa-trash cursor-point"></i></div>
-                            </div>
-                            <hr/>
-                        `);
+                                                    <div class="w-5"><i class="fa fa-close text-black fa-trash cursor-point"></i></div>
+                                    </div>
+                                    <hr/>
+                                `);
         });
     }
 

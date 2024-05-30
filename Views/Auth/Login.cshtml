@@ -1,52 +1,98 @@
 ﻿
-
+<div class="body-login">
     <div class="login-container">
-        <h2>Login</h2>
+        <h2></h2>
         <form id="login-form" action="javascript:void(0);">
+
             <div class="form-group">
                 <label for="email">Email</label>
                 <input type="email" id="email" name="email" required>
             </div>
-            <button type="button" class="login-button" onclick="requestOTP()">Request OTP</button>
+            <button type="button" class="login-button" onclick="requestOTP()" id="btnOtp">Login</button>
         </form>
-        <form id="otp-form" action="/login" method="post" style="display: none;">
+        <form id="otp-form" action="/auth/login" method="post" style="display: none;">
             <div class="form-group">
                 <label for="otp">Enter OTP</label>
                 <input type="text" id="otp" name="otp" required>
+                <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl" />
             </div>
             <button type="submit" class="login-button">Login</button>
         </form>
         <form id="first-form" action="/update" method="post" style="display: none;">
             <div class="form-group">
                 <label for="otp">Enter Name</label>
-                <input type="text" id="otp" name="otp" required>
+                <input type="text" id="name" name="name" required>
             </div>
-            <button type="submit" class="login-button">Login</button>
+            <button type="submit" class="login-button">Update Record</button>
         </form>
     </div>
+</div>
+
 
     <script>
+   
         function requestOTP() {
+            let btnOtp = document.getElementById('btnOtp');
+            btnOtp.disabled = true;
+           
             const email = document.getElementById('email').value;
+           
+        $.ajax({
+            type: "POST",
+            url: "/Auth/RequestOtp",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(email),
+            success: function (result, status, xhr) {
+                btnOtp.disabled = false;
+                toastr.success('Successfully Sent OTP')
+             
 
-            fetch('/api/request-otp', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ email: email })
-            })
-            .then(response => {
-                if (response.ok) {
-                    document.getElementById('login-form').style.display = 'none';
-                    document.getElementById('otp-form').style.display = 'block';
-                } else {
-                    alert('Email not found.');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-        }
+                            document.getElementById('login-form').style.display = 'none';
+                            document.getElementById('otp-form').style.display = 'block';
+            },
+            error: function (xhr, status, error) {
+                btnOtp.disabled = false;
+                $("#dataDiv").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
+            }
+        });
+    }
+    function updateRecord() {
+        const email = document.getElementById('email').value;
+        $.ajax({
+            type: "POST",
+            url: "/Auth/RequestOtp",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(email),
+            success: function (result, status, xhr) {
+                toastr.success('Successfully Updated ')
+                console.log(result)
+
+                document.getElementById('login-form').style.display = 'none';
+                document.getElementById('otp-form').style.display = 'block';
+            },
+            error: function (xhr, status, error) {
+                $("#dataDiv").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
+            }
+        });
+    }
+    // fetch('/Auth/requestotp', {
+    //     method: 'POST',
+    //     headers: {
+    //         'Content-Type': 'application/json'
+    //     },
+    //     body: JSON.stringify({ email: email })
+    // })
+    //     .then(response => {
+    //         if (response.ok) {
+    //             document.getElementById('login-form').style.display = 'none';
+    //             document.getElementById('otp-form').style.display = 'block';
+    //         } else {
+    //             alert('Email not found.');
+    //         }
+    //     })
+    //     .catch(error => {
+    //         console.error('Error:', error);
+    //     });
+
     </script>
 

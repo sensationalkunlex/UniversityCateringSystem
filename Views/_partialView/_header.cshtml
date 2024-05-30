@@ -5,13 +5,16 @@
     <nav class="navbar navbar-light bg-light w-100 position-fixed">
     <div class="text-black d-flex "> <img src="https://www.hull.ac.uk/assets/developer/static-templates/header/images/new/uoh-black.svg" class="small-img" />  </div>
     <div class="mt ">
-        @if (User.Identity.IsAuthenticated)
+            <span class="nav-profile-name">
+                @{
+                    string User_Name = User?.Claims?.FirstOrDefault(x => x.Type == "UserName")?.Value;
+                }
+              
+            </span>
+
+            @if (String.IsNullOrEmpty(User_Name))
         {
-            <a class="btn btn-primary rounded-border" href="/logout">Log out</a>
-        }
-        else
-        {
-            <a class="btn btn-primary rounded-border" href="/login">
+            <a class="btn btn-primary rounded-border" href="/auth/login">
                 <i class="fa fa-arrow-right"></i>| Login
             </a>
         }
@@ -34,6 +37,16 @@
         </div>
 
 
+    </div>
+    <div>
+            @if (!String.IsNullOrEmpty(@User_Name))
+            {
+
+                <a class="btn btn-primary rounded-border" asp-action="logout" asp-controller="auth">
+                    <i class="fa fa-logout text-primary"></i>
+                    Logout
+                </a>
+            }
     </div>
 
     

@@ -82,7 +82,7 @@
             @foreach (var product in Model)
             {
                 <div class="col-md-4 mb-3" id="clickAdd" onclick="addToCart(@product.Id)" data-id="@product.Id">
-                    <div class="card">
+                    <div class="card card-list">
                         <img src="@product.imageUrl" class="card-img-top" alt="Product Image" style="height: 400px;object-fit: cover;object-position: center;">
                         <div class="card-body text-center">
                           

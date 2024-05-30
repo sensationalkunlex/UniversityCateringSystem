@@ -12,15 +12,12 @@ namespace UniversityCateringSystem.Services
     public class ProductServices : IProductServices
     {
         private readonly AppDbContext _context;
-        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IWebHostEnvironment _webHostEnvironment;
 
         public ProductServices(AppDbContext context, 
-            IHttpContextAccessor httpContextAccessor,
             IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
-            _httpContextAccessor = httpContextAccessor;
             this._webHostEnvironment = webHostEnvironment;
         }
         public async Task<List<Product>> GetProducts()

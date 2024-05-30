@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.Security.Claims;
 using UniversityCateringSystem.Models;
 using UniversityCateringSystem.Services;
 
@@ -22,10 +23,10 @@ namespace UniversityCateringSystem.Controllers
         }
         public async Task<IActionResult> Index()
         {
-   
+           var UserName = User.FindFirstValue(ClaimTypes.Role);
             _product.SeedData();
             var products =await _product.GetProducts();
-           _product.SendMail();
+           
             return View(products);
         }
         public async Task<IActionResult> GetCart()

@@ -1,14 +1,8 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Data;
 
 namespace UniversityCateringSystem.Models
 {
-    public class BaseEntity
-    {
-        [Key]
-        public Guid Id { get; set; }
-    }
     public enum Role
     {
         Admin = 2,
@@ -19,9 +13,9 @@ namespace UniversityCateringSystem.Models
     {
 
         public string Email { get; set; }
-        public string Name { get; set; }
+        public string? Name { get; set; }
+        public bool? NewUser { get; set; }
 
-        public string Password { get; set; }
         public Role Role { get; set; }
     }
 }

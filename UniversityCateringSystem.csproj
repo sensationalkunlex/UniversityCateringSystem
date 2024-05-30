@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Views\Payment\SuccessView.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="img\food.png" />
     <None Remove="img\green.jpg" />
   </ItemGroup>
@@ -20,6 +24,10 @@
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Views\Payment\SuccessView.cshtml" />
   </ItemGroup>
 
   <ItemGroup>

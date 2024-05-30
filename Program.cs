@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using UniversityCateringSystem.AuthService;
+using UniversityCateringSystem.Controllers;
 using UniversityCateringSystem.Data;
 using UniversityCateringSystem.Services;
 
@@ -25,18 +26,34 @@ namespace UniversityCateringSystem
                 options.Cookie.HttpOnly = true;
             });
             builder.Services.AddScoped<IProductServices, ProductServices>();
-            builder.Services.AddScoped<IPayPalService, PayPalService>();
+            builder.Services.AddScoped<IPayPalService, PayPalServicer>();
+            builder.Services.AddHttpClient<PayPalService>();
+            builder.Services.AddSingleton<PayPalService>();
+            builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<IOtpService, OtpService>();
+            builder.Services.AddScoped<IEmailService, EmailService>();
             builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                 .AddCookie(config =>
-                 {
 
-                     config.Cookie.Name = "UserLoginCookie"; // Name of cookie   
-                     config.LoginPath = "/Auth/login"; // Path for the redirect to user login page  
-                     config.AccessDeniedPath = "/Login/UserAccessDenied";
-                     config.ExpireTimeSpan = TimeSpan.FromMinutes(20);
-                 });
+
+            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+       .AddCookie(config =>
+       {
+           config.Cookie.Name = "UserLoginCookie"; // Name of the cookie
+           config.LoginPath = "/Auth/Login"; // Path for the redirect to the user login page
+           config.AccessDeniedPath = "/Auth/AccessDenied"; // Path for access denied page
+           config.ExpireTimeSpan = TimeSpan.FromMinutes(20); // Cookie expiration time
+       });
+
             builder.Services.AddScoped<IAuthorizationHandler, RolesAuthorizationHandler>();
+
+            builder.Services.AddAuthorization(options =>
+            {
+                options.AddPolicy("RequireAdministratorRole",
+                     policy => policy.RequireRole("Administrator"));
+                options.AddPolicy("RequireCustomerRole",
+                     policy => policy.RequireRole("Customer"));
+                // Add more policies as needed
+            });
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -52,6 +69,7 @@ namespace UniversityCateringSystem
 
             app.UseRouting();
             app.UseSession();
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllerRoute(
