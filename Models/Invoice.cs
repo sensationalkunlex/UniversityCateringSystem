@@ -36,6 +36,7 @@ namespace UniversityCateringSystem.Models
     public enum PaymentType
     {
         Paypal,
+        PayAtCounter,
         PayLater,
     }
     public enum TransactionStatus

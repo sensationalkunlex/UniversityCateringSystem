@@ -1,11 +1,16 @@
-﻿ <div class="invoice-box container mt-5">
+﻿
+<div class="product-name mb-5 print-remove container">
+        <a href="/">Home</a> >
+       Receipt
+    </div>
+ <div class="invoice-box container mt-5">
         <table class="table table-borderless">
             <tr class="top">
                 <td colspan="2">
                     <table class="table table-borderless">
                         <tr>
                             <td class="title">
-                                <h2>Test Store</h2>
+                                <h2>University Catering System</h2>
                             </td>
                             <td>
                                 Invoice #: @Model.InvoiceNumber<br>
@@ -25,11 +30,15 @@
                             </td>
                             <td>
                                 <!-- Add customer information here if needed -->
+                                Customer Name
+                                <br>
+                                @Model.User.Name
                             </td>
                         </tr>
                     </table>
                 </td>
             </tr>
+            
             <tr class="heading">
                 <td>
                     Payment Method
@@ -38,14 +47,7 @@
                     @Model.PaymentType
                 </td>
             </tr>
-            <tr class="details">
-                <td>
-                    Payer ID: @Model.PayerId
-                </td>
-                <td>
-                    Payment ID: @Model.PaymentId
-                </td>
-            </tr>
+
             <tr class="heading">
                 <td>
                     Item
@@ -72,5 +74,15 @@
                     Total: @string.Format(new System.Globalization.CultureInfo("en-GB"), "{0:C}", Model.Amount)
                 </td>
             </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="footer">
+            <p>Thank you for your purchase!</p>
+        </div>
+                </td>
+            </tr>
         </table>
+    </div>
+    <div  class="mb-5 d-flex justify-content-center print-remove">
+        <button class="btn btn-primary mb-5" onclick="window.print()">Print Receipt</button>
     </div>

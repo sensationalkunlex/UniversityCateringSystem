@@ -19,7 +19,13 @@ namespace UniversityCateringSystem.Controllers
         }
         public async Task<Invoice?> GetInvoiceByNumber(string InvoiceNumber)
         {
-            return await _context.Invoices.Include(x => x.CartLists).FirstOrDefaultAsync(x => x.InvoiceNumber == InvoiceNumber);
+            return await _context.Invoices.Include(x => x.CartLists).Include(x=>x.User).FirstOrDefaultAsync(x => x.InvoiceNumber == InvoiceNumber);
+        }
+        public async Task InsertInvoice(Invoice invoice)
+        {
+           await _context.Invoices.AddAsync(invoice);
+            await _context.SaveChangesAsync();  
+
         }
         public async Task<User> GetUserByEmailAsync(string email)
         {

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Globalization;
 using System.Security.Claims;
@@ -31,11 +32,11 @@ namespace UniversityCateringSystem.Controllers
         public async Task<ActionResult> Receipt(string invoiceNumber)
         {
            
-          var invoice= await _userService.GetInvoiceByPayerId(invoiceNumber);
+          var invoice= await _userService.GetInvoiceByNumber(invoiceNumber);
 
             return View(invoice);
         }
-        private object GetPayment(string guid, Invoice invoice)
+       private object GetPayment(string guid, Invoice invoice)
         {
             string invoiceNumber = invoice.InvoiceNumber;
             string baseURI = $"{Request.Scheme}://{Request.Host}/Payment/PaymentWithPaypal?";
@@ -82,7 +83,19 @@ namespace UniversityCateringSystem.Controllers
             return payment;
         }
       
-       
+       public async Task<IActionResult> PayAtCounter()
+        {
+            try
+            {
+                var guid = Guid.NewGuid().ToString();
+                var appInvoice = CreateInvoiceAndMapCartItems(guid, true);
+                await _userService.InsertInvoice(appInvoice);
+            }
+            catch(Exception ex) { 
+                return BadRequest(ex.Message);
+            }
+            return RedirectToAction(nameof(Receipt), new { invoiceNumber = HttpContext.Session.GetString("INV") });
+        }
         public async Task<IActionResult> PaymentWithPaypal()
         {
             string payerId = Request.Query["PayerID"];
@@ -130,9 +143,9 @@ namespace UniversityCateringSystem.Controllers
                 // Log the exception (ex)
                 return View("FailureView");
             }
-            return RedirectToAction("Receipt",new { invoiceNumber = payerId } );
+            return RedirectToAction("Receipt",new { invoiceNumber = HttpContext.Session.GetString("INV") } );
         }
-        public Invoice CreateInvoiceAndMapCartItems(string ReceiptId )
+        public Invoice CreateInvoiceAndMapCartItems(string ReceiptId, bool payLater=false )
         {
             var UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
            
@@ -140,9 +153,11 @@ namespace UniversityCateringSystem.Controllers
             var cart = HttpContext.Session.GetObjectFromJson<List<CartItem>>("Cart") ?? new List<CartItem>();
             var cartTotal = cart.Sum(i => i.Quantity * i.Price);
             string invoiceNumber = "INV-" + DateTime.Now.Ticks;
+            HttpContext.Session.SetString("INV", invoiceNumber);
             string baseURI = $"{Request.Scheme}://{Request.Host}/Payment/PaymentWithPaypal?";
             var guid = Guid.NewGuid().ToString();
             string redirectUrl = baseURI + "guid=" + guid;
+            
 
             var cartItems = cart.Select(item => new CartList
             {
@@ -154,26 +169,22 @@ namespace UniversityCateringSystem.Controllers
                 Currency = "GBP",
               
             }).ToList();
-
+           
             var invoice = new Invoice
             {
                 InvoiceNumber = invoiceNumber,
                 Amount = cartTotal,
-              // PaymentId = "samplePaymentId",  
-               // PayerId = "samplePayerId",
-               // State = "Pending",
-               
                 UserId =Guid.Parse(UserId),
                 InvoiceGuid= ReceiptId,
                 Currency ="GBP",
-                PaymentType=PaymentType.Paypal,
+                PaymentType=payLater? PaymentType.PayAtCounter : PaymentType.Paypal,
                 TransactionStatus=TransactionStatus.Pending,
                 redirectUrl=redirectUrl,
                 CartLists= cartItems,
-
+                
 
             };
-            
+            HttpContext.Session.Remove("Cart");
             return invoice;
         }
     }

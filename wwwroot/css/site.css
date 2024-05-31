@@ -345,3 +345,9 @@ a{
             border-top: 2px solid #eee;
             font-weight: bold;
         }
+@media print {
+    /* styles here */
+    .print-remove {
+        display:none !important
+    }
+}

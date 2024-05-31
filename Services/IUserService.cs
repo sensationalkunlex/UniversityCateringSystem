@@ -8,6 +8,7 @@ namespace UniversityCateringSystem.Controllers
         Task<Invoice?> GetInvoiceByNumber(string InvoiceNumber);
         Task<Invoice?> GetInvoiceByPayerId(string InvoiceNumber);
         Task<User> GetUserByEmailAsync(string email);
+        Task InsertInvoice(Invoice invoice);
         Task UpdateUserAsync(string email, string name);
     }
 }
