@@ -13,7 +13,14 @@ namespace UniversityCateringSystem.Controllers
         {
             _context = context;
         }
-
+        public async Task<Invoice?> GetInvoiceByPayerId(string PayerId)
+        {
+            return await _context.Invoices.Include(x=>x.CartLists).FirstOrDefaultAsync(x => x.PayerId == PayerId);
+        }
+        public async Task<Invoice?> GetInvoiceByNumber(string InvoiceNumber)
+        {
+            return await _context.Invoices.Include(x => x.CartLists).FirstOrDefaultAsync(x => x.InvoiceNumber == InvoiceNumber);
+        }
         public async Task<User> GetUserByEmailAsync(string email)
         {
             var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == email);
@@ -38,6 +45,22 @@ namespace UniversityCateringSystem.Controllers
             catch (Exception ex)
             {
                 throw new Exception(email, ex);
+            }
+        }
+        public async Task UpdateUserAsync(string email, string name)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == email);
+            try
+            {
+                user.NewUser = false;
+                   user.Name=name;
+                    await _context.SaveChangesAsync();
+              
+              
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
     }

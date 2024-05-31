@@ -26,7 +26,6 @@ namespace UniversityCateringSystem
                 options.Cookie.HttpOnly = true;
             });
             builder.Services.AddScoped<IProductServices, ProductServices>();
-            builder.Services.AddScoped<IPayPalService, PayPalServicer>();
             builder.Services.AddHttpClient<PayPalService>();
             builder.Services.AddSingleton<PayPalService>();
             builder.Services.AddScoped<IUserService, UserService>();

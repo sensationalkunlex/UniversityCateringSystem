@@ -14,7 +14,7 @@ namespace UniversityCateringSystem.Models
 
         public string Email { get; set; }
         public string? Name { get; set; }
-        public bool? NewUser { get; set; }
+        public bool NewUser { get; set; }
 
         public Role Role { get; set; }
     }

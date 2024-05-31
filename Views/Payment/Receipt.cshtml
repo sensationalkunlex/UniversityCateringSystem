@@ -1,0 +1,76 @@
+﻿ <div class="invoice-box container mt-5">
+        <table class="table table-borderless">
+            <tr class="top">
+                <td colspan="2">
+                    <table class="table table-borderless">
+                        <tr>
+                            <td class="title">
+                                <h2>Test Store</h2>
+                            </td>
+                            <td>
+                                Invoice #: @Model.InvoiceNumber<br>
+                                Created: @Model.CreatedDate.ToString("MMMM d, yyyy")<br>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr class="information">
+                <td colspan="2">
+                    <table class="table table-borderless">
+                        <tr>
+                            <td>
+                                University of Hull<br>
+                                United Kingdom
+                            </td>
+                            <td>
+                                <!-- Add customer information here if needed -->
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr class="heading">
+                <td>
+                    Payment Method
+                </td>
+                <td>
+                    @Model.PaymentType
+                </td>
+            </tr>
+            <tr class="details">
+                <td>
+                    Payer ID: @Model.PayerId
+                </td>
+                <td>
+                    Payment ID: @Model.PaymentId
+                </td>
+            </tr>
+            <tr class="heading">
+                <td>
+                    Item
+                </td>
+                <td>
+                    Price
+                </td>
+            </tr>
+            @foreach (var item in Model.CartLists)
+            {
+                <tr class="item">
+                    <td>
+                        @item.ProductName
+                    </td>
+                    <td>
+                    @string.Format(new System.Globalization.CultureInfo("en-GB"), "{0:C}", item.Price * item.Quantity)
+
+                    </td>
+                </tr>
+            }
+            <tr class="total">
+                <td></td>
+                <td>
+                    Total: @string.Format(new System.Globalization.CultureInfo("en-GB"), "{0:C}", Model.Amount)
+                </td>
+            </tr>
+        </table>
+    </div>

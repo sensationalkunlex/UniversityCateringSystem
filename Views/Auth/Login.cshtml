@@ -6,55 +6,65 @@
          <h3 class="text-white my-5 fs-2" >Sign In</h3>
         <form id="login-form" action="javascript:void(0);" class="my-5">
            <div class="feature col">
-        
+
         <p class="text-muted">We offer an exclusive discount package for staff and students who log in with their school email.
         </p>
-        
+
       </div>
-         
-              
-              
+
+
+
            <div class="d-flex justify-content-start">
    <label for="email" class="text-white fs-5 justify-content-start">Email</label>
            </div>
-               
+
             <div class="input-group form-group">
-						<div class="input-group-prepend">
-							<span class="input-group-text"><i class="fas fa-user"></i></span>
-						</div>
-						<input  class="form-control" placeholder="Enter your email"  type="email" id="email" name="email" required>
-						
-					</div>
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                        </div>
+                        <input  class="form-control" placeholder="Enter your email"  type="email" id="email" name="email" required>
+
+                    </div>
             <button type="button" class="login-button" onclick="requestOTP()" id="btnOtp">Login</button>
         </form>
         <form id="otp-form" action="/auth/login" method="post" style="display: none;">
             <div class="form-group">
                 <label for="otp">Enter OTP</label>
                 <input type="text" id="otp" name="otp" required>
-                <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl"/>
+                <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl">
             </div>
             <button type="submit" class="login-button" >Login</button>
         </form>
         <form id="first-form" action="/update" method="post" style="display: none;">
             <div class="form-group">
+                Since this is your first time using the platform, please  update your information.           
+                </div>
+            <div class="form-group">
                 <label for="otp">Enter Name</label>
-                <input type="text" id="name" name="name" required>
+
             </div>
-            <button type="submit" class="login-button">Update Record</button>
+             <div class="input-group form-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                        </div>
+                        <input  class="form-control" placeholder="Enter your name"  type="text" id="name" name="name" required>
+
+                    </div>
+            <button type="button" class="login-button" onclick="updateRecord()" id="btnUpd">Update Record</button>
         </form>
     </div>
 </div>
 
 
     <script>
-  
+
         function requestOTP() {
             let btnOtp = document.getElementById('btnOtp');
             btnOtp.disabled = true;
-           
+
             const email = document.getElementById('email').value;
-        
-        
+
+
         $.ajax({
             type: "POST",
             url: "/Auth/RequestOtp",
@@ -62,12 +72,22 @@
             data: JSON.stringify(email),
             success: function (result, status, xhr) {
                 console.log(result);
+
                 btnOtp.disabled = false;
+                 if(result.success){
                 toastr.success('Successfully Sent OTP')
-             
+
 
                             document.getElementById('login-form').style.display = 'none';
+
+                            if(!result.newUser)
                             document.getElementById('otp-form').style.display = 'block';
+                            else
+                              document.getElementById('first-form').style.display = 'block';
+                 }
+                 else{
+                       toastr.error(result.message)
+                 }
             },
             error: function (xhr, status, error) {
                 btnOtp.disabled = false;
@@ -76,18 +96,24 @@
         });
     }
     function updateRecord() {
-        const email = document.getElementById('email').value;
+        const name = document.getElementById('name').value;
         $.ajax({
             type: "POST",
-            url: "/Auth/RequestOtp",
+            url: "/Auth/UpdateUserInfo",
             contentType: "application/json; charset=utf-8",
-            data: JSON.stringify(email),
+            data: JSON.stringify(name),
             success: function (result, status, xhr) {
-                toastr.success('Successfully Updated ')
-                console.log(result)
-
+                if(result.success){
+                toastr.success('Successfully Updated ');
                 document.getElementById('login-form').style.display = 'none';
+                 document.getElementById('first-form').style.display = 'none';
                 document.getElementById('otp-form').style.display = 'block';
+                }
+                else
+                {
+                    toastr.error(result.message)
+                }
+
             },
             error: function (xhr, status, error) {
                 $("#dataDiv").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
@@ -115,3 +141,168 @@
 
     </script>
 
+
+<div class="body-login">
+    <div class="login-container">
+
+     <img src="https://www.hull.ac.uk/assets/developer/static-templates/header/images/new/uoh-white.svg" class="small-img" />
+         <h3 class="text-white my-5 fs-2" >Sign In</h3>
+        <form id="login-form" action="javascript:void(0);" class="my-5">
+           <div class="feature col">
+
+        <p class="text-muted">We offer an exclusive discount package for staff and students who log in with their school email.
+        </p>
+
+      </div>
+
+
+
+           <div class="d-flex justify-content-start">
+   <label for="email" class="text-white fs-5 justify-content-start">Email</label>
+           </div>
+
+            <div class="input-group form-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                        </div>
+                        <input  class="form-control" placeholder="Enter your email"  type="email" id="email" name="email" required>
+
+                    </div>
+            <button type="button" class="login-button" onclick="requestOTP()" id="btnOtp">Login</button>
+        </form>
+        <form id="otp-form" action="/auth/login" method="post" style="display: none;">
+            <div class="form-group">
+                <label for="otp">Enter OTP</label>
+                <input type="text" id="otp" name="otp" required>
+                <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl">
+            </div>
+            <button type="submit" class="login-button" >Login</button>
+        </form>
+        <form id="first-form" action="/update" method="post" style="display: none;">
+            <div class="form-group text-muted">
+                Since this is your first time using the platform, please  update your information.           
+                </div>
+            <div class="form-group text-muted">
+                <label for="otp">Enter Name</label>
+
+            </div>
+             <div class="input-group form-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                        </div>
+                        <input  class="form-control" placeholder="Enter your name"  type="text" id="name" name="name" required>
+
+                    </div>
+            <button type="button" class="login-button" onclick="updateRecord()" id="btnUpd">Update Record</button>
+        </form>
+    </div>
+</div>
+
+
+    <script>
+       function first() {
+           debugger;
+           var checker="@ViewBag.start";
+        if (checker=="False") {
+            document.getElementById('login-form').style.display = 'none';
+            document.getElementById('first-form').style.display = 'none';
+            document.getElementById('otp-form').style.display = 'block';
+             toastr.error("Invalid OTP")
+        }
+    }
+
+    // Call the function when the page loads
+    window.onload = first;
+        function requestOTP() {
+            let btnOtp = document.getElementById('btnOtp');
+            btnOtp.disabled = true;
+
+            const email = document.getElementById('email').value;
+
+
+        $.ajax({
+            type: "POST",
+            url: "/Auth/RequestOtp",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(email),
+            success: function (result, status, xhr) {
+                console.log(result);
+
+                btnOtp.disabled = false;
+                 if(result.success){
+
+
+                            document.getElementById('login-form').style.display = 'none';
+
+                            if(!result.newUser)
+                            {
+                            document.getElementById('otp-form').style.display = 'block';
+                            toastr.success('Successfully sent OTP to your mail')
+                            
+                            }
+                            else
+                            {
+                                document.getElementById('first-form').style.display = 'block';
+                                toastr.success('Successfully registered your mail')
+                            }
+                              
+                 }
+                 else{
+                       toastr.error(result.message)
+                 }
+            },
+            error: function (xhr, status, error) {
+                btnOtp.disabled = false;
+                $("#dataDiv").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
+            }
+        });
+    }
+    function updateRecord() {
+         let btnOtp = document.getElementById('btnUpd');
+            btnOtp.disabled = true;
+        const name = document.getElementById('name').value;
+        $.ajax({
+            type: "POST",
+            url: "/Auth/UpdateUserInfo",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(name),
+            success: function (result, status, xhr) {
+                  btnOtp.disabled = false;
+                if(result.success){
+                toastr.success('Successfully Updated ');
+                document.getElementById('login-form').style.display = 'none';
+                 document.getElementById('first-form').style.display = 'none';
+                document.getElementById('otp-form').style.display = 'block';
+                }
+                else
+                {
+                    toastr.error(result.message)
+                }
+
+            },
+            error: function (xhr, status, error) {
+                $("#dataDiv").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
+                 btnOtp.disabled = false;
+            }
+        });
+    }
+    // fetch('/Auth/requestotp', {
+    //     method: 'POST',
+    //     headers: {
+    //         'Content-Type': 'application/json'
+    //     },
+    //     body: JSON.stringify({ email: email })
+    // })
+    //     .then(response => {
+    //         if (response.ok) {
+    //             document.getElementById('login-form').style.display = 'none';
+    //             document.getElementById('otp-form').style.display = 'block';
+    //         } else {
+    //             alert('Email not found.');
+    //         }
+    //     })
+    //     .catch(error => {
+    //         console.error('Error:', error);
+    //     });
+
+    </script>

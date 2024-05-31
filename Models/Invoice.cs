@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using PayPal.Api;
+
 using static System.Formats.Asn1.AsnWriter;
 
 namespace UniversityCateringSystem.Models
@@ -8,20 +8,18 @@ namespace UniversityCateringSystem.Models
     {
         public string InvoiceNumber { get; set; }
         public decimal Amount { get; set; }
-        public string PaymentId { get; set; }
-        public string PayerId { get; set; }
+        public string? PaymentId { get; set; }
+        public string? PayerId { get; set; }
         public string Currency { get; set; } = "GBP"; 
-        public string State { get; set; }
+        public string? State { get; set; }
         public DateTime CreatedDate { get; set; }= DateTime.UtcNow;
-        public List<Invoice> Invoices { get; set;}
+        public List<CartList> CartLists { get; set;}
         public PaymentType? PaymentType { get; set; }
         public TransactionStatus? TransactionStatus { get; set; }
         public User User { get; set; }
         public Guid UserId { get; set; }
-
-    
-
-
+        public string redirectUrl { get;  set; }
+        public string InvoiceGuid { get;  set; }
     }
     public class CartList: BaseEntity
     {
@@ -44,7 +42,8 @@ namespace UniversityCateringSystem.Models
     {
         Failed,
         Successful,
-        Pending
+        Pending,
+        Cancel,
     }
 
 }
