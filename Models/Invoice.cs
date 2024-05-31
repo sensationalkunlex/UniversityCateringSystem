@@ -44,6 +44,7 @@ namespace UniversityCateringSystem.Models
     {
         Failed,
         Successful,
+        Pending
     }
 
 }

@@ -26,6 +26,12 @@ namespace UniversityCateringSystem.Controllers
         [HttpPost]
         public async Task<IActionResult> RequestOtp([FromBody]string email)
         {
+            if(!IsValidEmail(email)){
+
+                 return Json(new { success = false,
+                 message= "Invalid email address" });
+            }
+
             var user = await _userService.GetUserByEmailAsync(email);
 
 
@@ -36,7 +42,22 @@ namespace UniversityCateringSystem.Controllers
             HttpContext.Session.SetString("Role", user.Role.ToString());
             return Json(new { success = true });
         }
+        private bool IsValidEmail(string email)
+        {
+        if (string.IsNullOrWhiteSpace(email))
+            return false;
 
+        try
+        {
+            // Check if email matches a valid email pattern
+            var regex = new Regex(@"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$");
+            return regex.IsMatch(email);
+        }
+        catch (Exception)
+        {
+            return false;
+        }
+        }
         public IActionResult Login( string ReturnUrl)
         {
             ViewBag.ReturnUrl = ReturnUrl;

@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css?family=Numans');
 html {
   font-size: 14px;
 }
@@ -203,16 +204,35 @@ a{
     min-height:100vh;
     margin:0;
     font-family:'Arial', sans-serif;
-    background-color:#f2f2f2;
+    background:linear-gradient(0deg, rgba(0, 0, 0, 0.8), rgba(255, 0, 150, 0.4)),url(../img/background2.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 100%;
+    font-family: 'Numans', sans-serif;
+
 }
 .login-container {
-    background: #fff;
+    background-color: rgba(0,0,0,0.9);
     padding: 3rem;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     width: 500px;
     text-align: center;
 }
+
+.input-group-prepend span{
+    width: 50px;
+   
+    color: black;
+    border:0 !important;
+    height: 44px;
+    }
+    
+    input:focus{
+    outline: 0 0 0 0  !important;
+    box-shadow: 0 0 0 0 !important;
+    
+    }
 
     .login-container h2 {
         margin-bottom: 1.5rem;

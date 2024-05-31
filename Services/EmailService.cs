@@ -48,8 +48,8 @@ namespace UniversityCateringSystem.Services
 
         private static void sendMail( MailMessage mailMessage)
         {
-            string fromEmail = "oyewusio@accessbankplc.com";
-            string emailPassword = "Solved@2024";
+            string fromEmail = "universitycateringservice@outlook.com";
+            string emailPassword = "Uni@2024";
             SmtpClient smtpClient = new SmtpClient("smtp-mail.outlook.com", 587);
             smtpClient.Credentials = new NetworkCredential(fromEmail, emailPassword);
             smtpClient.EnableSsl = true;

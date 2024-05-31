@@ -1,13 +1,30 @@
 ﻿
 <div class="body-login">
     <div class="login-container">
-        <h2></h2>
-        <form id="login-form" action="javascript:void(0);">
 
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email" required>
-            </div>
+     <img src="https://www.hull.ac.uk/assets/developer/static-templates/header/images/new/uoh-white.svg" class="small-img" />
+         <h3 class="text-white my-5 fs-2" >Sign In</h3>
+        <form id="login-form" action="javascript:void(0);" class="my-5">
+           <div class="feature col">
+        
+        <p class="text-muted">We offer an exclusive discount package for staff and students who log in with their school email.
+        </p>
+        
+      </div>
+         
+              
+              
+           <div class="d-flex justify-content-start">
+   <label for="email" class="text-white fs-5 justify-content-start">Email</label>
+           </div>
+               
+            <div class="input-group form-group">
+						<div class="input-group-prepend">
+							<span class="input-group-text"><i class="fas fa-user"></i></span>
+						</div>
+						<input  class="form-control" placeholder="Enter your email"  type="email" id="email" name="email" required>
+						
+					</div>
             <button type="button" class="login-button" onclick="requestOTP()" id="btnOtp">Login</button>
         </form>
         <form id="otp-form" action="/auth/login" method="post" style="display: none;">
@@ -30,19 +47,21 @@
 
 
     <script>
-   
+  
         function requestOTP() {
             let btnOtp = document.getElementById('btnOtp');
             btnOtp.disabled = true;
            
             const email = document.getElementById('email').value;
-           
+        
+        
         $.ajax({
             type: "POST",
             url: "/Auth/RequestOtp",
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify(email),
             success: function (result, status, xhr) {
+                console.log(result);
                 btnOtp.disabled = false;
                 toastr.success('Successfully Sent OTP')
              

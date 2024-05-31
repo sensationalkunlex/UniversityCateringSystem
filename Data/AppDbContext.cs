@@ -9,6 +9,8 @@ namespace UniversityCateringSystem.Data
         public DbSet<Product> Products { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<OtpLoginRequest> OtpLoginRequests { get; set; }
+        public DbSet<Invoice> Invoices {get; set;}
+        public DbSet<CartList> CartLists {get; set;}
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
         }
