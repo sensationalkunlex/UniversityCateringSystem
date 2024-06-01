@@ -81,7 +81,7 @@ namespace UniversityCateringSystem.Services
     ("Burger and Fries", "https://images.squarespace-cdn.com/content/v1/61c38dbdda885109e22a3868/1663951873993-TYZBQUIBC23O25OE9RDK/burger+and+fries.jpg"),
     ("Pizza", "https://www.foodandwine.com/thmb/Wd4lBRZz3X_8qBr69UOu2m7I2iw=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/classic-cheese-pizza-FT-RECIPE0422-31a2c938fc2546c9a07b7011658cfd05.jpg"),
     ("Sandwich", "https://www.eatingwell.com/thmb/LQXwKPvgYghCs2LH7bwlsx0gD1Q=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/cucumber-caprese-sandwich-6343482dece14c3d876bc7bac317ecd8.jpg"),
-    ("Soup", "https://i2.wp.com/www.downshiftology.com/wp-content/uploads/2023/09/Vegetable-Soup-main.jpg"),
+    ("Soup", "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/chickensoup_1918_16x9.jpg"),
     ("Salad", "https://cdn.loveandlemons.com/wp-content/uploads/2021/04/green-salad.jpg"),
     ("Pasta", "https://assets.epicurious.com/photos/5988e3458e3ab375fe3c0caf/1:1/w_3607,h_3607,c_limit/How-to-Make-Chicken-Alfredo-Pasta-hero-02082017.jpg"),
     ("Curry", "https://www.allrecipes.com/thmb/FL-xnyAllLyHcKdkjUZkotVlHR8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/46822-indian-chicken-curry-ii-DDMFS-4x3-39160aaa95674ee395b9d4609e3b0988.jpg"),
@@ -104,7 +104,7 @@ namespace UniversityCateringSystem.Services
         decimal GenerateRandomPrice()
         {
             var random = new Random();
-            return Math.Round((decimal)random.NextDouble() * 250, 2);
+            return Math.Round((decimal)random.NextDouble() * 1, 2);
         }
 
         int GenerateRandomQuantity()
@@ -113,52 +113,6 @@ namespace UniversityCateringSystem.Services
             return random.Next(1, 100);
         }
 
-        public void setIPAddress()
-        {
-            System.Diagnostics.Process process = new System.Diagnostics.Process();
-            System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
-            startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
-            startInfo.FileName = "cmd.exe";
-            startInfo.Arguments = "/C netsh interface ip set address name=Ethernet static 192.168.5.10 255.255.255.0 192.168.5.1";
-            startInfo.Verb = "runas";
-            process.StartInfo = startInfo;
-            process.Start();
-        }
-        public void SendMail()
-        {
-            try
-            {
-                string fromEmail = "oyekunle.oyewusi@outlook.com";
-                string emailPassword = "Pelumi22";
-                string toEmail = "oyewusioyekunle@gmail.com";
-                string newEmail = "oyekunle.oyewusi@outlook.com";
-                MailMessage mailMessage = new MailMessage();
-                mailMessage.From = new MailAddress(newEmail);
-                mailMessage.To.Add(toEmail);
-                mailMessage.Subject = "Hello World!";
-               // mailMessage.Body = "<h1>This is a test email sent from a .NET application using Outlook.</h1>";
-                mailMessage.IsBodyHtml= true;
-                string filePath = Path.Combine(_webHostEnvironment.ContentRootPath, "Template/Mail", "invoice.html");
-
-                string htmlContent = File.ReadAllText(filePath);
-                  mailMessage.Body = htmlContent;
-                //string attachmentPath = Path.Combine(_webHostEnvironment.ContentRootPath, "img", "green.jpg");
-                //Attachment attachment = new Attachment(attachmentPath);
-                //mailMessage.Attachments.Add(attachment);
-                SmtpClient smtpClient = new SmtpClient("smtp-mail.outlook.com", 587);
-                smtpClient.Credentials = new NetworkCredential(fromEmail, emailPassword);
-                smtpClient.EnableSsl = true;
-
-                
-                smtpClient.Send(mailMessage);
-
-
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("An error occurred while sending the email: " + ex.Message);
-            }
-
-        }
-    }
+        
+      }
 }
