@@ -31,7 +31,7 @@ namespace UniversityCateringSystem.Services
 				.Products.Where(x =>
 					x.Name.ToLower().StartsWith(query.ToLower())
 					|| x.Description.ToLower().StartsWith(query.ToLower())
-				)
+				).Take(10)
 				.ToListAsync();
 		}
 

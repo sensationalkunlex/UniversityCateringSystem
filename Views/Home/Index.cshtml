@@ -9,7 +9,7 @@
     @Html.Partial("~/Views/_partialView/_header.cshtml")
 </div>
 
-<div class="container mt-3 p-5">
+<div class="container mt-3 p-5" id="arrowup">
     <div class="d-flex justify-content-lg-between">
         <section class="hero text-black ">
             <div class="container">
@@ -47,7 +47,12 @@
     </div>
    
 </div>
+<div class="container-display">
+   <a href="#arrowup">
+ <span class="fa fa-arrow-up"></span>
+   </a>
 
+</div>
 <script>
     let loading = document.getElementById("loading-spinner");
     let page = 1;
