@@ -17,18 +17,12 @@ html {
 .container-xxl {
   max-width: 1530px;
 }
-@font-face {
-  font-family: Poppins;
-  src: url("../fonts/Poppins/Poppins-Black.ttf");
-  src: url("../fonts/Poppins/Poppins-Black.ttf");
-  src: url("../fonts/Poppins/Poppins-Bold.ttf") format("truetype");
-  /*src: local(TrendSans-Five), url(../fonts/TrendSans-Five.otf) format('opentype');*/
-}
+
 body {
   /* background-image: url("/img/i-like-food.svg"); */
   background-color: white;
   min-height: 100vh;
-  font-family: "Poppins truetype" sans-serif;
+  font-family: "Poppins" sans-serif !important;
 }
 
 a {
