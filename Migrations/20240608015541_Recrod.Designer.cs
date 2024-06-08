@@ -11,8 +11,8 @@ using UniversityCateringSystem.Data;
 namespace UniversityCateringSystem.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240531113618_updatedb415")]
-    partial class updatedb415
+    [Migration("20240608015541_Recrod")]
+    partial class Recrod
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

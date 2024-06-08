@@ -15,7 +15,7 @@
             @if (String.IsNullOrEmpty(User_Name))
         {
             <a class="btn btn-primary rounded-border" href="/auth/login">
-                <i class="fa fa-arrow-right"></i>| Login
+                <i class="fa fa-sign-in-alt"></i> | Login
             </a>
         }
     </div>
@@ -39,11 +39,19 @@
 
     </div>
     <div>
+         @if (!String.IsNullOrEmpty(@User_Name))
+            {
+                  <a asp-action="orders" asp-controller="auth">
+                    <i class="fa fa-jedi  text-black"></i> |
+                    Orders History
+                </a>
+                }
+    </div>
+    <div>
             @if (!String.IsNullOrEmpty(@User_Name))
             {
-
                 <a class="btn btn-primary rounded-border" asp-action="logout" asp-controller="auth">
-                    <i class="fa fa-logout text-primary"></i>
+                    <i class="fa fa-sign-out-alt text-white"></i> |
                     Logout
                 </a>
             }

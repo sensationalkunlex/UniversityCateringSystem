@@ -120,30 +120,15 @@
             }
         });
     }
-    // fetch('/Auth/requestotp', {
-    //     method: 'POST',
-    //     headers: {
-    //         'Content-Type': 'application/json'
-    //     },
-    //     body: JSON.stringify({ email: email })
-    // })
-    //     .then(response => {
-    //         if (response.ok) {
-    //             document.getElementById('login-form').style.display = 'none';
-    //             document.getElementById('otp-form').style.display = 'block';
-    //         } else {
-    //             alert('Email not found.');
-    //         }
-    //     })
-    //     .catch(error => {
-    //         console.error('Error:', error);
-    //     });
+    
 
     </script>
 
 
 <div class="body-login">
+      <div id="loading-spinner"></div>
     <div class="login-container">
+
 
      <img src="https://www.hull.ac.uk/assets/developer/static-templates/header/images/new/uoh-white.svg" class="small-img" />
          <h3 class="text-white my-5 fs-2" >Sign In</h3>
@@ -200,8 +185,8 @@
 
 
     <script>
+        let loading=document.getElementById("loading-spinner")
        function first() {
-           debugger;
            var checker="@ViewBag.start";
         if (checker=="False") {
             document.getElementById('login-form').style.display = 'none';
@@ -218,7 +203,7 @@
             btnOtp.disabled = true;
 
             const email = document.getElementById('email').value;
-
+            loading.classList.add("d-block");
 
         $.ajax({
             type: "POST",
@@ -227,7 +212,7 @@
             data: JSON.stringify(email),
             success: function (result, status, xhr) {
                 console.log(result);
-
+                loading.classList.add("d-none");
                 btnOtp.disabled = false;
                  if(result.success){
 
@@ -249,10 +234,12 @@
                  }
                  else{
                        toastr.error(result.message)
+                        loading.classList.add("d-none");
                  }
             },
             error: function (xhr, status, error) {
                 btnOtp.disabled = false;
+                 loading.classList.add("d-none");
                 $("#dataDiv").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
             }
         });
@@ -260,6 +247,7 @@
     function updateRecord() {
          let btnOtp = document.getElementById('btnUpd');
             btnOtp.disabled = true;
+            loading.classList.add("d-block");
         const name = document.getElementById('name').value;
         $.ajax({
             type: "POST",
@@ -268,6 +256,7 @@
             data: JSON.stringify(name),
             success: function (result, status, xhr) {
                   btnOtp.disabled = false;
+                  loading.classList.add("d-none");
                 if(result.success){
                 toastr.success('Successfully Updated ');
                 document.getElementById('login-form').style.display = 'none';
@@ -281,6 +270,7 @@
 
             },
             error: function (xhr, status, error) {
+                loading.classList.add("d-none");
                 $("#dataDiv").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
                  btnOtp.disabled = false;
             }
