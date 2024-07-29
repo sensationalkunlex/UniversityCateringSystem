@@ -41,6 +41,7 @@ namespace UniversityCateringSystem.Controllers
             {
                 ProductId = productId,
                 ProductName =product.Name,
+                ImageUrl=product.imageUrl,
                 Price = product.Price,
                 Quantity = 1
             });
@@ -51,13 +52,16 @@ namespace UniversityCateringSystem.Controllers
             return Json(cart);
         }
         [HttpPost]
-        public async Task<IActionResult> AddReduceMore( int productId, bool isActionAdd)
+        public async Task<IActionResult> AddReduceMore( int productId, bool isActionAdd, bool newQty=false)
         {
             var product = await _productServices.GetProductsById(productId);
+            if(newQty){
+                RemoveCart(product);
+            }
             // Retrieve cart from session or database
             var cart = new List<CartItem>();
             if (isActionAdd)
-                cart = AddToCart(product);
+                cart = AddSingleToCart(product);
             else
                 cart = RemoveFromCart(product);
             // Update session
@@ -65,7 +69,7 @@ namespace UniversityCateringSystem.Controllers
 
             return Json(new { success=true});
         }
-        private List<CartItem> AddToCart(Product product)
+        private List<CartItem> AddSingleToCart(Product product)
         {
             var cart = HttpContext.Session.GetObjectFromJson<List<CartItem>>(Cart) ?? new List<CartItem>(); ;
             CartItem? checkCart = FetchCart(product);
@@ -79,6 +83,7 @@ namespace UniversityCateringSystem.Controllers
                 {
                     ProductId = product.Id,
                     ProductName = product.Name,
+                    ImageUrl= product.imageUrl,
                     Price = product.Price,
                     Quantity = 1
                 });
@@ -98,6 +103,7 @@ namespace UniversityCateringSystem.Controllers
                     id = item.ProductId,
                     productName = item.ProductName,
                     quantity = item.Quantity,
+                    imageUrl= item.ImageUrl,
                     priceFormatted = string.Format(System.Globalization.CultureInfo.GetCultureInfo("en-GB"), "{0:C}", item.Price),
                     itemTotalFormatted = string.Format(System.Globalization.CultureInfo.GetCultureInfo("en-GB"), "{0:C}", item.Quantity * item.Price)
                 }).ToList(),
@@ -142,6 +148,75 @@ namespace UniversityCateringSystem.Controllers
         {
             
             return View();
+        }
+        [HttpPost]
+        public async Task<ActionResult> AddToCartUpdateAsync( [FromBody] CartItem cartItem)
+        {
+        var product = await _productServices.GetProductsById(cartItem.ProductId);
+        product.Qty=cartItem.Quantity;
+        AddAllToCart(product);
+        return Ok(new { message = "Product added to cart successfully!" +JsonSerializer.Serialize(cartItem) });
+        }
+        private void RemoveCart(Product product)
+        {
+            var cart = HttpContext.Session.GetObjectFromJson<List<CartItem>>(Cart) ?? new List<CartItem>(); ;
+            CartItem? checkCart = FetchCart(product);
+            // Add new item to cart
+            if (checkCart != null)
+            {
+                cart.RemoveAll(x=>x.ProductId==checkCart.ProductId);
+            }
+          
+            HttpContext.Session.SetString(Cart, JsonSerializer.Serialize(cart));
+        }
+        private void AddAllToCart(Product product)
+        {
+            var cart = HttpContext.Session.GetObjectFromJson<List<CartItem>>(Cart) ?? new List<CartItem>(); ;
+            CartItem? checkCart = FetchCart(product);
+            // Add new item to cart
+            if (checkCart != null)
+            {
+                cart.First(x => x.ProductId == product.Id).Quantity=product.Qty;
+            }
+            else
+                cart.Add(new CartItem
+                {
+                    ProductId = product.Id,
+                    ProductName = product.Name,
+                    ImageUrl= product.imageUrl,
+                    Price = product.Price,
+                    Quantity = product.Qty
+                });
+            HttpContext.Session.SetString(Cart, JsonSerializer.Serialize(cart));
+        }
+        
+        public async Task<ActionResult> Food(int Id)
+        {
+            List<CartItem> cart = HttpContext.Session.GetObjectFromJson<List<CartItem>>("Cart") ?? new List<CartItem>();
+
+            var checkCart = await Task.Run(() => cart.FirstOrDefault(x => x.ProductId == Id));
+
+            if (checkCart == null)
+            {
+                var GetProduct = await _productServices.GetProductsById(Id);
+                if (GetProduct != null)
+                {
+                    checkCart = new CartItem
+                    {
+                        ProductId = GetProduct.Id,
+                        ProductName = GetProduct.Name,
+                        Price = GetProduct.Price,
+                        Quantity = 0,
+                        ImageUrl=GetProduct.imageUrl
+                    };
+                
+                }
+            }
+
+            HttpContext.Session.SetObjectAsJson("Cart", cart);
+
+            return View(checkCart);
+
         }
     }
 }
