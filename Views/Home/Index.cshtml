@@ -4,93 +4,24 @@
 
 @model List<Product>
 
-@* 
 
-    <header class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
-        <nav class="container-xxl bd-gutter flex-wrap flex-lg-nowrap">
-            <a class="navbar-brand" href="/">
-                <img src="https://www.hull.ac.uk/assets/developer/static-templates/header/images/new/uoh-white.svg" width="30" height="30" alt="Unversity of Hull logo" class="d-inline-block align-top">
-              
-            </a>
+<div class="w-lg-25 container">
+    @Html.Partial("~/Views/_partialView/_header.cshtml")
+</div>
 
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
-                    </li>
-                 
-                </ul>
-               
-
-            </div>
-
-            <div class="view-count">
-                <div class="user-view">
-                    @if (User.Identity.IsAuthenticated)
-                    {
-                        <a class="btn btn-outline-dark bg-white btn-sm" href="/logout">Sign-Out</a>
-                    }
-                    else
-                    {
-                    <a class="btn btn-outline-dark btn-sm bg-white" href="/login">Sign-In</a>
-                    }
-                </div>
-                <a href="/Cart/Checkout" class="nav-link px-2 text-white">
-                    <span class="fa fa-shopping-cart"></span>
-                </a>
-            </div>
-        </nav>
-    </header> *@
-
-<div class="container">
-
-    <div class="p-4 d-flex justify-content-between">
-        
-        <div class="text-black d-flex "> <img src="~/img/icon.png"  class="small-img" /> <h1 >UCS</h1> </div>
-                    <div class="mt-4 ">
-                @if (User.Identity.IsAuthenticated)
-                {
-                    <a class="btn btn-primary rounded-border" href="/logout">Log out</a>
-                }
-                else
-                {
-                        <a class="btn btn-primary rounded-border" href="/login">
-                            <i class="fa fa-arrow-right"></i> Login</a>
-                }
-            </div>
-        <div class="view-count text-primary  position-relative ">
-            <div>
-                <a href="/Cart/Checkout" class="nav-link px-2 text-muted">
-                    <span class="fa fa-shopping-cart"></span>
-                    <span class="cart-count text-muted" id="cartCount">
-                    </span>
-                </a>
-                
-            </div>
-          
-            
-        </div>
-    </div>
-    
-    <div class="row">
-        <section class="hero text-black col-md-6">
+<div class="container mt-3 p-5" id="arrowup">
+    <div class="d-flex justify-content-lg-between">
+        <section class="hero text-black ">
             <div class="container">
                 <div class="bg-display p-3 rounded-border w-50 d-flex justify-content-around text-primary my-5">
-                  <span> More than faster</span>  <img src="~/img/cherry.png"/>
- @* <img src="https://www.hull.ac.uk/assets/developer/static-templates/header/images/new/uoh-white.svg" width="50" alt="Unversity of Hull logo" class="d-inline-block align-top"> *@
-
+                  <span> More than Faster</span>  <img src="~/img/cherry.png"/>
                 </div>
-
-               
                 <h1 class="title-text"><span >Welcome</span> to University Catering System       </h1>
-                <p class="fs-5 me-5 my-3 text-black">Order delicious <span class="color-text">food</span> for your events and occasions with ease.</p>
-                <a href="#" class="btn btn-primary rounded-border">Explore Menu</a>
+                <p class="fs-2 me-5 my-3 text-black">Order delicious <span class="color-text">food</span> for your events and occasions with ease.</p>
+                <a href="#" class="btn btn-primary rounded-border px-3 py-2">Explore Menu</a>
             </div>
         </section>
-            <div class="col-md-6">
+        <div class="d-none d-lg-block">
                 <img src="~/img/food.png" class="app-image"/>
             </div>
       
@@ -98,65 +29,190 @@
     </div>
  
     <div class="container">
-        <h2 class="text-center mb-4">Our Menu</h2>
+        <h2 class="text-center my-4">Our Menu</h2>
         <!-- Bootstrap Carousel -->
+        <div id="loading-spinner"></div>
     </div>
-    <section class="row">
-
-        @foreach (var product in Model)
-        {
-            <div class="col-md-4 mb-3">
-                <div class="card">
-                    <img src="@product.imageUrl" class="card-img-top" alt="Product Image" style="height: 200px;object-fit: cover;object-position: center;">
-                    <div class="card-body">
-                        <h5 class="card-title">@product.Name</h5>
-                        <p class="card-text">Price: @product.Price</p>
-
-                        <button type="submit" class="btn btn-primary .add-to-cart-btn" id="clickAdd" onclick="addToCart(@product.Id)" data-id="@product.Id">Add to Cart</button>
-
-                    </div>
-                </div>
+    <div class="container p-4">
+        <div class="d-flex justify-content-center gap-2">  
+            <div class="form-group w-50 mb-5">
+                <input type="text" id="myInput"  class="form-control py-3"/>
             </div>
-        }
-    </section>
+            <div class="form-group">
+                <button class="btn btn-primary form-control py-3 px-5" id="searchBtn">search</button>
+            </div>
+       </div>
+        <section class="row product-list">  
+        </section>
+    </div>
+   
 </div>
+<div class="container-display">
+   <a href="#arrowup">
+ <span class="fa fa-arrow-up"></span>
+   </a>
 
-
+</div>
 <script>
-    window.addEventListener("load", (event) => {
-        GetCartUpdate();
-    })
-    function GetCartUpdate(){
-      
+    let loading = document.getElementById("loading-spinner");
+    let page = 1;
+    let query = '';
+    let loadingMore = false;
+
+    window.addEventListener("load", () => {
+        loadProducts(query, page);
+    });
+
+    document.getElementById("searchBtn").addEventListener('click', function(){
+        query = $("#myInput").val();
+        page = 1;
+        $(".product-list").empty(); // Clear the product list
+        loadProducts(query, page);
+    });
+
+    window.addEventListener('scroll', () => {
+        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 200 && !loadingMore) {
+            loadingMore = true;
+            page++;
+            loadProducts(query, page);
+        }
+    });
+
+    function loadProducts(query, page) {
+        loading.classList.add("d-block");
         $.ajax({
             type: "Get",
-            url: "/Home/GetCart",
+            url: `/Home/GetProducts?query=${query}&page=${page}`,
             contentType: "application/json; charset=utf-8",
-            success: function (result, status, xhr) {
-                document.getElementById("cartCount").innerHTML = result.length;
+            success: function (data, status, xhr) {
+                loading.classList.add("d-none");
+                loadingMore = false;
+                var productTable = $(".product-list");
+                $.each(data.result, function (index, product) {
+                    productTable.append(`
+                        <div class="col-md-4 mb-3" id="clickAdd" onclick="addToCart(${product.id})" data-id="${product.id}">
+                            <div class="card card-list">
+                                <img src="${product.imageUrl}" class="card-img-top" alt="Product Image" style="height: 400px; object-fit: cover; object-position: center;">
+                                <div class="card-body text-center">
+                                    <p class="card-text my-3 text-danger bold"> ${formatCurrency(product.price)}</p>
+                                    <h4 class="card-title">${product.name}</h4>
+                                    <p class="card-text my-3">${product.description}</p>
+                                </div>
+                            </div>
+                        </div>
+                    `);
+                });
             },
             error: function (xhr, status, error) {
-                $("#dataDiv").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
+                loading.classList.add("d-none");
+                $("#dataDiv").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText);
             }
         });
-  
     }
-    
+
     function addToCart(id) {
-        $.ajax({
-            type: "POST",
-            url: "/Cart/AddToCart",
-            contentType: "application/json; charset=utf-8",
-            data: JSON.stringify(id),
-            success: function (result, status, xhr) {
-                toastr.success('Successfully Added to cart')
-               console.log(result)
-                GetCartUpdate()
-            },
-            error: function (xhr, status, error) {
-                $("#dataDiv").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
+        window.location.href = `/cart/food/${id}`;
+    }
+
+    function autocomplete(inp, url) {
+        var currentFocus;
+        loading.classList.add("d-block");
+        inp.addEventListener("input", function (e) {
+            var val = this.value;
+            if (!val) {
+                closeAllLists();
+                return false;
+            }
+
+            fetchSuggestions(val, function (suggestions) {
+                closeAllLists();
+                if (!suggestions.result || suggestions.result.length === 0) return false;
+                currentFocus = -1;
+
+                var a = document.createElement("DIV");
+                a.setAttribute("id", inp.id + "autocomplete-list");
+                a.setAttribute("class", "autocomplete-items");
+                inp.parentNode.appendChild(a);
+
+                suggestions.result.forEach(function (item) {
+                    var b = document.createElement("DIV");
+                    loading.classList.add("none");
+                    var matchStart = item.name.toUpperCase().indexOf(val.toUpperCase());
+                    b.innerHTML = item.name.substr(0, matchStart) + "<strong>" + item.name.substr(matchStart, val.length) + "</strong>" + item.name.substr(matchStart + val.length);
+                    b.innerHTML += "<input type='hidden' value='" + item.name + "'>";
+                    b.addEventListener("click", function (e) {
+                        inp.value = this.getElementsByTagName("input")[0].value;
+                        closeAllLists();
+                    });
+                    a.appendChild(b);
+                });
+            });
+        });
+
+        inp.addEventListener("keydown", function (e) {
+            var x = document.getElementById(this.id + "autocomplete-list");
+            if (x) x = x.getElementsByTagName("div");
+            if (e.keyCode == 40) {
+                currentFocus++;
+                addActive(x);
+            } else if (e.keyCode == 38) {
+                currentFocus--;
+                addActive(x);
+            } else if (e.keyCode == 13) {
+                e.preventDefault();
+                if (currentFocus > -1) {
+                    if (x) x[currentFocus].click();
+                }
             }
         });
+
+        function fetchSuggestions(query, callback) {
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    var suggestions = JSON.parse(xhr.responseText);
+                    callback(suggestions);
+                }
+            };
+            xhr.open("GET", url + "?query=" + encodeURIComponent(query), true);
+            xhr.send();
         }
-  
+
+        function addActive(x) {
+            if (!x) return false;
+            removeActive(x);
+            if (currentFocus >= x.length) currentFocus = 0;
+            if (currentFocus < 0) currentFocus = (x.length - 1);
+            x[currentFocus].classList.add("autocomplete-active");
+        }
+
+        function removeActive(x) {
+            for (var i = 0; i < x.length; i++) {
+                x[i].classList.remove("autocomplete-active");
+            }
+        }
+
+        function closeAllLists(elmnt) {
+            var x = document.getElementsByClassName("autocomplete-items");
+            for (var i = 0; i < x.length; i++) {
+                if (elmnt != x[i] && elmnt != inp) {
+                    x[i].parentNode.removeChild(x[i]);
+                }
+            }
+        }
+
+        document.addEventListener("click", function (e) {
+            closeAllLists(e.target);
+        });
+    }
+
+    autocomplete(document.getElementById("myInput"), '@Url.Action("GetSearchable", "Home")');
+
+    function formatCurrency(value) {
+        return new Intl.NumberFormat('en-GB', {
+            style: 'currency',
+            currency: 'GBP'
+        }).format(value);
+    }
 </script>
+
