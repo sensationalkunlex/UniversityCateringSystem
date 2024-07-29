@@ -1,0 +1,83 @@
+﻿
+<div class="p-4 d-flex justify-content-center align-items-center gap-5 print-remove">
+   
+  
+    <nav class="navbar navbar-light bg-light w-100 position-fixed">
+    <div class="text-black d-flex "> <img src="/img/logo.svg" class="small-img" />  </div>
+    <div class="mt ">
+            <span class="nav-profile-name">
+                @{
+                    string User_Name = User?.Claims?.FirstOrDefault(x => x.Type == "UserName")?.Value;
+                }
+              
+            </span>
+
+            @if (String.IsNullOrEmpty(User_Name))
+        {
+            <a class="btn btn-primary rounded-border" href="/auth/login">
+                <i class="fa fa-sign-in-alt"></i> | Login
+            </a>
+        }
+    </div>
+   
+    <div class="text-black fs-5">
+        <a class="" href="/">Shop</a>
+    </div>
+    <div class="text-black fs-5">
+        <a class="" href="/">About</a>
+    </div>
+    <div class="view-count text-primary  position-relative ">
+        <div>
+            <a href="/Cart/Checkout" class="nav-link px-2 text-muted">
+                <span class="fa fa-shopping-cart bg-display-1 text-white fs-4 p-2"></span>
+                <span class="cart-count text-white" id="cartCount">
+                </span>
+            </a>
+
+        </div>
+
+
+    </div>
+    <div>
+         @if (!String.IsNullOrEmpty(@User_Name))
+            {
+                  <a asp-action="orders" asp-controller="auth">
+                    <i class="fa fa-jedi  text-black"></i> |
+                    Orders History
+                </a>
+                }
+    </div>
+    <div>
+            @if (!String.IsNullOrEmpty(@User_Name))
+            {
+                <a class="btn btn-primary rounded-border" asp-action="logout" asp-controller="auth">
+                    <i class="fa fa-sign-out-alt text-white"></i> |
+                    Logout
+                </a>
+            }
+    </div>
+
+    
+ 
+</nav>
+</div>
+<script>
+    window.addEventListener("load", (event) => {
+        GetCartUpdate();
+    })
+    function GetCartUpdate() {
+
+        $.ajax({
+            type: "Get",
+            url: "/Home/GetCart",
+            contentType: "application/json; charset=utf-8",
+            success: function (result, status, xhr) {
+                document.getElementById("cartCount").innerHTML = result.length;
+            },
+            error: function (xhr, status, error) {
+                $("#dataDiv").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
+            }
+        });
+
+    }
+  </script>

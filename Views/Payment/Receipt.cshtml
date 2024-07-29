@@ -1,0 +1,88 @@
+﻿
+<div class="product-name mb-5 print-remove container">
+        <a href="/">Home</a> >
+       Receipt
+    </div>
+ <div class="invoice-box container mt-5">
+        <table class="table table-borderless">
+            <tr class="top">
+                <td colspan="2">
+                    <table class="table table-borderless">
+                        <tr>
+                            <td class="title">
+                                <h2>University Catering System</h2>
+                            </td>
+                            <td>
+                                Invoice #: @Model.InvoiceNumber<br>
+                                Created: @Model.CreatedDate.ToString("MMMM d, yyyy")<br>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr class="information">
+                <td colspan="2">
+                    <table class="table table-borderless">
+                        <tr>
+                            <td>
+                                University of Hull<br>
+                                United Kingdom
+                            </td>
+                            <td>
+                                <!-- Add customer information here if needed -->
+                                Customer Name
+                                <br>
+                                @Model.User.Name
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            
+            <tr class="heading">
+                <td>
+                    Payment Method
+                </td>
+                <td>
+                    @Model.PaymentType
+                </td>
+            </tr>
+
+            <tr class="heading">
+                <td>
+                    Item
+                </td>
+                <td>
+                    Price
+                </td>
+            </tr>
+            @foreach (var item in Model.CartLists)
+            {
+                <tr class="item">
+                    <td>
+                        @item.ProductName
+                    </td>
+                    <td>
+                    @string.Format(new System.Globalization.CultureInfo("en-GB"), "{0:C}", item.Price * item.Quantity)
+
+                    </td>
+                </tr>
+            }
+            <tr class="total">
+                <td></td>
+                <td>
+                    Total: @string.Format(new System.Globalization.CultureInfo("en-GB"), "{0:C}", Model.Amount)
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="footer">
+            <p>Thank you for your purchase!</p>
+        </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div  class="mb-5 d-flex justify-content-center print-remove">
+        <button class="btn btn-primary mb-5" onclick="window.print()">Print Receipt</button>
+    </div>
